@@ -46,6 +46,15 @@
   } 
 }{def}
 
+\newtcbtheorem{Proof}{Proof}{
+  enhanced,
+  sharp corners,
+  colback=white,
+  colframe=black!5!white,
+  coltitle=black,
+  fonttitle=\bfseries
+}{prf}
+
 
 \title{Kernel Methods in Machine Learning - Course Notes}
 \author{Hugo Cisneros}
@@ -102,7 +111,7 @@ corresponding norm).
 
 Let $\mathcal{X}$ be a set and $\mathcal{H} \subset \mathbb{R}^\mathcal{X}$ a 
 class of functions forming a Hilbert space. 
-\begin{Definition}{}{}
+\begin{Definition}{Reproducing kernel}{}
     A kernel $K$ is called a \textbf{reproducing kernel} (r.k.) of $\mathcal{H}$ 
     if 
     \begin{itemize}
@@ -117,7 +126,7 @@ class of functions forming a Hilbert space.
 
 If there exists a r.k., $\mathcal{H}$ is called a RKHS.
 
-\begin{Definition}{Equivalent Definition of RKHS}{}
+\begin{Theorem}{Equivalent Definition of RKHS}{rkhs}
     $\mathcal{H}$ is a RKHS if and only if for any $x\in\mathcal{X}$, the 
     mapping
     \begin{align*}
@@ -125,7 +134,59 @@ If there exists a r.k., $\mathcal{H}$ is called a RKHS.
         & f \mapsto f(x)
     \end{align*}
     is \textbf{continuous}.
-\end{Definition}
+\end{Theorem}
+
+As a corollary, convergence in a RKHS implies point-wise convergence.
+
+\begin{Proof}{of Theorem \ref{thm:rkhs}}{}
+  
+  
+  ($\Rightarrow$) If a r.k. exists in $\mathcal{H}$ then for any $(x,f) \in 
+  \mathcal{X} \times \mathcal{H}$:
+  \begin{align*}
+    |f(x)| &= |\langle f, K_x \rangle_\mathcal{H} |\\
+           &\leq \lVert f \rVert_\mathcal{H} \cdot \lVert K_x \rVert_\mathcal{H}
+           \tag{Cauchy-Schwarz}\\
+           &\leq \lVert f \rVert_\mathcal{H} \cdot K(x,x)^\frac{1}{2}
+  \end{align*}
+  Therefore, $f\in\mathcal{H} \rightarrow f(x) \in \mathbb{R}$ is a linear 
+  continuous mapping because $F$ is linear and $\lim_{f\rightarrow 0} F(f)= 0$
+
+  \vspace{10pt}
+  ($\Leftarrow$) $F$ is continuous, by the Riesz representation theorem: there
+  exists a unique $g_x \in \mathcal{H}$ such that $f(x) = \langle f, g_x 
+  \rangle_\mathcal{H}$.
+
+  The function $K: (x, y) \mapsto g_x(y)$ is then a r.k. for $\mathcal{H}$
+\end{Proof}
+
+\begin{Theorem}{Uniqueness of RKHS}{unique_rkhs}
+  If $\mathcal{H}$ is a RKHS, it has a \textbf{unique r.k.}, and a function $K$
+  can be \textbf{the r.k of at most one RKHS}.
+\end{Theorem}
+
+\begin{Proof}{of Theorem \ref{thm:unique_rkhs}}{}
+  (Uniqueness) If $K$ and $K'$ are two r.k. of a RKHS, then for any $x$
+  \begin{align*}
+    \lVert K_x - K'_x\rVert^2 = K_x(x) - K'_x(x) - K_x(x) + K'_x(x) = 0
+  \end{align*}
+  So $K_x = K'_X$
+
+  % TODO The RKHS of a r.k is unique
+\end{Proof}
+
+\begin{Theorem}{}{pdrk}
+  A function $K : \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ is 
+  \textbf{p.d. if and only if it is a r.k.}.
+\end{Theorem}
+
+\begin{Proof}{of Theorem \ref{thm:pdrk}}{}
+  ($\Leftarrow$) A r.k. is symmetric, and $\sum_{i,j} a_i a_j K(x_i, x_j)
+   = \left\lVert \sum_i a_i K_{x_i} \right\rVert^2_\mathcal{H} \geq 0$
+
+  \vspace{10pt}
+  ($\Rightarrow$) 
+\end{Proof}
 
 \subsection{Examples}
 
