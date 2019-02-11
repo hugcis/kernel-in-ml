@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}
+
+\title{Kernel Methods in Machine Learning - Course Notes}
+\author{Hugo Cisneros}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Kernels and RKHS}
+
+\subsection{Positive Definite Kernels}
+
+A kernel $K$ is  a comparison function $K: \mathcal{X}\times\mathcal{X}
+ \rightarrow \mathbb{R}$.
+
+With $n$ data point $\{x_1, x_2, ..., x_n\}$ a $n \times n$ matrix $\mathbf{K}$
+can be defined by $\mathbf{K}_{ij} = K(x_i, x_j)$.
+
+A kernel $K$ is positive definite (p.d.) if it is symmetric ($K(x, x') = 
+K(x', x)$) and for all sets of $a$ and $x$
+\begin{align*}
+    \sum_i\sum_j a_i a_j K(x_i, x_j) \geq 0
+\end{align*}
+
+This is equivalent to the kernel matrix being positive semi-definite. 
+
+\underline{Example:} Kernel on $\mathbb{R}\times\mathbb{R}$  defined by 
+$K(x, x') = xx'$ is p.d. ($xx' = x'x$ and $ \sum_i\sum_j a_i a_j K(x_i, x_j) = 
+\left(\sum_i a_i x_i\right)^2 \geq 0$).
+
+\subsection{Reproducing Kernel Hilbert Spaces (RKHS)}
+
+%%---------------------------------
+\section{Kernel tricks}
+
+%%---------------------------------
+\section{Kernel Methods: Supervised Learning}
+
+%%---------------------------------
+\section{Kernel Methods: Unsupervised Learning}
+
+%%---------------------------------
+\section{The Kernel Jungle}
+
+%%---------------------------------
+\section{Open Problems and Research Topics}
+
+\end{document}
