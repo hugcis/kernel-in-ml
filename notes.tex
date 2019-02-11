@@ -3,6 +3,49 @@
 \usepackage{amsmath}
 \usepackage[margin=1in]{geometry}
 \usepackage{parskip}
+\usepackage{cleveref}
+\usepackage[most]{tcolorbox}
+
+\newtcbtheorem{Theorem}{Theorem}{
+  enhanced,
+  sharp corners,
+  center,
+  leftrule=1mm,
+  width=.9\linewidth,
+  attach boxed title to top left={
+    yshifttext=-1mm
+  },
+  colback=white,
+  colframe=black!50!white,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=black!50!white,
+    colframe=black!50!white,
+  } 
+}{thm}
+
+\newtcbtheorem{Definition}{Definition}{
+  enhanced,
+  sharp corners,
+  center,
+  leftrule=1mm,
+  width=.9\linewidth,
+  attach boxed title to top left={
+    yshifttext=-1mm
+  },
+  colback=white,
+  colframe=black!25!white,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=black!25!white,
+    colframe=black!25!white,
+  } 
+}{def}
+
 
 \title{Kernel Methods in Machine Learning - Course Notes}
 \author{Hugo Cisneros}
@@ -15,25 +58,76 @@
 
 \subsection{Positive Definite Kernels}
 
-A kernel $K$ is  a comparison function $K: \mathcal{X}\times\mathcal{X}
+\begin{Definition}{}{}
+    A kernel $K$ is  a comparison function $K: \mathcal{X}\times\mathcal{X}
  \rightarrow \mathbb{R}$.
 
-With $n$ data point $\{x_1, x_2, ..., x_n\}$ a $n \times n$ matrix $\mathbf{K}$
-can be defined by $\mathbf{K}_{ij} = K(x_i, x_j)$.
 
-A kernel $K$ is positive definite (p.d.) if it is symmetric ($K(x, x') = 
-K(x', x)$) and for all sets of $a$ and $x$
-\begin{align*}
-    \sum_i\sum_j a_i a_j K(x_i, x_j) \geq 0
-\end{align*}
+    With $n$ data point $\{x_1, x_2, ..., x_n\}$ a $n \times n$ matrix 
+    $\mathbf{K}$ can be defined by $\mathbf{K}_{ij} = K(x_i, x_j)$.
 
-This is equivalent to the kernel matrix being positive semi-definite. 
+    A kernel $K$ is \textbf{positive definite} (p.d.) if it is 
+    \textbf{symmetric} ($K(x, x') = K(x', x)$) and for all sets of $a$ and $x$
+    \begin{align*}
+        \boxed{\sum_i\sum_j a_i a_j K(x_i, x_j) \geq 0}
+    \end{align*}
+\end{Definition}
 
-\underline{Example:} Kernel on $\mathbb{R}\times\mathbb{R}$  defined by 
-$K(x, x') = xx'$ is p.d. ($xx' = x'x$ and $ \sum_i\sum_j a_i a_j K(x_i, x_j) = 
-\left(\sum_i a_i x_i\right)^2 \geq 0$).
+This is equivalent to the kernel matrix being \textbf{positive semi-definite}. 
+
+\underline{Examples:}\begin{itemize}
+    \item Kernel on $\mathbb{R}\times\mathbb{R}$  defined by 
+    $K(x, x') = xx'$ is p.d. ($xx' = x'x$ and $ \sum_i\sum_j a_i a_j 
+    K(x_i, x_j) = \left(\sum_i a_i x_i\right)^2 \geq 0$).
+    \item Linear kernel ($K(x, x') = \langle x, x'\rangle_{\mathbb{R}^d}$) is 
+    p.d 
+    \item More generally for any set $\mathcal{X}$, and function $\Phi: 
+    \mathcal{X} \rightarrow \mathbb{R}^d$, the kernel defined by $K(x,x') = 
+    \langle \Phi(x), \Phi(x') \rangle_{\mathbb{R}^d}$ is p.d.
+\end{itemize} 
+
+\begin{Theorem}{Aronszajn, 1950}{}
+    $K$ is a p.d. kernel on the set $\mathcal{X}$ if and only if there exists a 
+    \textbf{Hilbert space $\mathcal{H}$ and a mapping $\Phi : \mathcal{X} 
+    \rightarrow \mathcal{H}$} such that, for any $x$, $x'$ in $\mathcal{X}$:
+    \begin{align*}
+        \boxed{K(x, x') = \langle \Phi(x), \Phi(x') \rangle_\mathcal{H}}
+    \end{align*}
+\end{Theorem}
+
+(A Hilbert space is a vector space with an inner product and complete for the 
+corresponding norm).
 
 \subsection{Reproducing Kernel Hilbert Spaces (RKHS)}
+
+Let $\mathcal{X}$ be a set and $\mathcal{H} \subset \mathbb{R}^\mathcal{X}$ a 
+class of functions forming a Hilbert space. 
+\begin{Definition}{}{}
+    A kernel $K$ is called a \textbf{reproducing kernel} (r.k.) of $\mathcal{H}$ 
+    if 
+    \begin{itemize}
+        \item $\mathcal{H}$ contains all functions of the form 
+        \begin{align*}
+           \boxed{\forall x \in \mathcal{X}, K_x: t \rightarrow K(x, t)}
+        \end{align*}
+        \item For every $x \in \mathcal{X}$ and $f\in \mathcal{H}$, 
+        $\boxed{f(x) = \langle f, K_x \rangle_\mathcal{H} }$
+    \end{itemize}
+\end{Definition}
+
+If there exists a r.k., $\mathcal{H}$ is called a RKHS.
+
+\begin{Definition}{Equivalent Definition of RKHS}{}
+    $\mathcal{H}$ is a RKHS if and only if for any $x\in\mathcal{X}$, the 
+    mapping
+    \begin{align*}
+        F: & \mathcal{H}\rightarrow \mathbb{R}\\
+        & f \mapsto f(x)
+    \end{align*}
+    is \textbf{continuous}.
+\end{Definition}
+
+\subsection{Examples}
 
 %%---------------------------------
 \section{Kernel tricks}
