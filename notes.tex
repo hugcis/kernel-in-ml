@@ -5,6 +5,7 @@
 \usepackage{parskip}
 \usepackage{cleveref}
 \usepackage[most]{tcolorbox}
+\usepackage{hyperref}
 
 \newtcbtheorem{Theorem}{Theorem}{
   enhanced,
@@ -52,7 +53,8 @@
   colback=white,
   colframe=black!5!white,
   coltitle=black,
-  fonttitle=\bfseries
+  fonttitle=\bfseries,
+  breakable,
 }{prf}
 
 
@@ -103,6 +105,7 @@ This is equivalent to the kernel matrix being \textbf{positive semi-definite}.
         \boxed{K(x, x') = \langle \Phi(x), \Phi(x') \rangle_\mathcal{H}}
     \end{align*}
 \end{Theorem}
+\hyperref[prf:aronszajn]{\small Proof}.
 
 (A Hilbert space is a vector space with an inner product and complete for the 
 corresponding norm).
@@ -135,12 +138,102 @@ If there exists a r.k., $\mathcal{H}$ is called a RKHS.
     \end{align*}
     is \textbf{continuous}.
 \end{Theorem}
+\hyperref[prf:rkhs]{\small Proof}.
 
 As a corollary, convergence in a RKHS implies point-wise convergence.
 
-\begin{Proof}{of Theorem \ref{thm:rkhs}}{}
+
+\begin{Theorem}{Uniqueness of RKHS}{unique_rkhs}
+  If $\mathcal{H}$ is a RKHS, it has a \textbf{unique r.k.}, and a function $K$
+  can be \textbf{the r.k of at most one RKHS}.
+\end{Theorem}
+\hyperref[prf:unique_rkhs]{\small Proof}.
+
+
+\begin{Theorem}{}{pdrk}
+  A function $K : \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ is 
+  \textbf{p.d. if and only if it is a r.k.}.
+\end{Theorem}
+\hyperref[prf:pdrk]{\small Proof}.
+
+
+\subsection{Examples}
+\subsubsection{Linear Kernel}
+
+\begin{Definition}{}{}
+  In $\mathbb{R}^d$, the linear kernel is defined by $K(x, y) = \langle x, y 
+  \rangle_{\mathbb{R}^d}$
+\end{Definition}
+
+\begin{Theorem}{}{}
   
-  
+\end{Theorem}
+
+%%---------------------------------
+\section{Kernel tricks}
+
+%%---------------------------------
+\section{Kernel Methods: Supervised Learning}
+
+%%---------------------------------
+\section{Kernel Methods: Unsupervised Learning}
+
+%%---------------------------------
+\section{The Kernel Jungle}
+\subsection{Green, Mercer, Herglotz, Bochner and friends}
+
+\subsubsection{Green Kernel}
+
+\begin{Theorem}{Green Kernel in dimension 1}{green1}
+  The set defined by
+  \begin{align*}
+    \mathcal{H} = \left\{f: [0, 1] \rightarrow \mathbb{R}, \text{absolutely 
+    continuous}, f' \in L^2([0, 1]), f(0) = 0 \right\}
+  \end{align*}
+  endowed with the inner product $\forall (f, g) \in \mathcal{F}^2 \langle f, g
+  \rangle = \int_0^1 f'(u)g'(u)du$, 
+  is a RKHS with with r.k.
+  \begin{align*}
+    \forall (x, y) \in [0, 1]^2, K(x, y) = \min(x, y)
+  \end{align*}.
+\end{Theorem}
+
+\begin{Theorem}{General Green Kernel}{green_general}
+  If $D$ is a differential operator on a class of functions of $\mathcal{H}$
+  such that the inner product $\langle f, g \rangle_\mathcal{H} = \langle Df, Dg 
+  \rangle_{L^2(\mathcal{X})}$
+
+  Then $\mathcal{H}$ is a RKHS and admits for r.k. the Green function of the 
+  operator $D^*D$
+\end{Theorem}
+
+
+\subsubsection{Mercer Kernels}
+
+\begin{Definition}{Mercer Kernels}{}
+  A kernel $K$ on a set $\mathcal{X}$ is called a Mercer kernel if: 
+  \begin{itemize}
+    \item $\mathcal{X}$ is a compact metric space (typically, a closed bounded
+    subset of $\mathbb{R}^d$)
+    \item $K: \mathcal{X}\times\mathcal{X} \rightarrow \mathbb{R}$ is a
+    continuous p.d kernel (w.r.t the Borel topology)
+  \end{itemize}
+\end{Definition}
+
+%%---------------------------------
+\section{Open Problems and Research Topics}
+
+
+%%---------------------------------
+%%---------------------------------
+
+\appendix
+
+\section{Proofs}
+
+\subsection{Kernels and RKHS}
+
+\begin{Proof}{of Theorem \ref{thm:rkhs}}{rkhs}
   ($\Rightarrow$) If a r.k. exists in $\mathcal{H}$ then for any $(x,f) \in 
   \mathcal{X} \times \mathcal{H}$:
   \begin{align*}
@@ -160,12 +253,7 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
   The function $K: (x, y) \mapsto g_x(y)$ is then a r.k. for $\mathcal{H}$
 \end{Proof}
 
-\begin{Theorem}{Uniqueness of RKHS}{unique_rkhs}
-  If $\mathcal{H}$ is a RKHS, it has a \textbf{unique r.k.}, and a function $K$
-  can be \textbf{the r.k of at most one RKHS}.
-\end{Theorem}
-
-\begin{Proof}{of Theorem \ref{thm:unique_rkhs}}{}
+\begin{Proof}{of Theorem \ref{thm:unique_rkhs}}{unique_rkhs}
   (Uniqueness) If $K$ and $K'$ are two r.k. of a RKHS, then for any $x$
   \begin{align*}
     \lVert K_x - K'_x\rVert^2 = K_x(x) - K'_x(x) - K_x(x) + K'_x(x) = 0
@@ -175,12 +263,7 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
   % TODO The RKHS of a r.k is unique
 \end{Proof}
 
-\begin{Theorem}{}{pdrk}
-  A function $K : \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ is 
-  \textbf{p.d. if and only if it is a r.k.}.
-\end{Theorem}
-
-\begin{Proof}{of Theorem \ref{thm:pdrk}}{}
+\begin{Proof}{of Theorem \ref{thm:pdrk}}{pdrk}
   ($\Leftarrow$) A r.k. is symmetric, and $\sum_{i,j} a_i a_j K(x_i, x_j)
    = \left\lVert \sum_i a_i K_{x_i} \right\rVert^2_\mathcal{H} \geq 0$
 
@@ -220,7 +303,7 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
   added $\mathcal{H}_0$, it becomes a Hilbert space with $K$ as r.k..
 \end{Proof}
 
-\begin{Proof}{of Aronszajn's theorem}{}
+\begin{Proof}{of \hyperref[thm:aronszajn]{Aronszajn's theorem}}{aronszajn}
   If $K$ is p.d. over a set $\mathcal{X}$, it is the r.k. of a Hilbert space 
   $\mathcal{H}$. The mapping $\Phi$ is defined by $\forall x \in \mathcal{X}, 
   \quad \Phi(x) = K_x$.
@@ -232,22 +315,11 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
   \end{align*}
 \end{Proof}
 
-\subsection{Examples}
-\subsubsection{Linear Kernel}
 
-%%---------------------------------
-\section{Kernel tricks}
+\subsection{The Kernel Jungle}
 
-%%---------------------------------
-\section{Kernel Methods: Supervised Learning}
-
-%%---------------------------------
-\section{Kernel Methods: Unsupervised Learning}
-
-%%---------------------------------
-\section{The Kernel Jungle}
-
-%%---------------------------------
-\section{Open Problems and Research Topics}
+\begin{Proof}{}{}
+  
+\end{Proof}
 
 \end{document}
