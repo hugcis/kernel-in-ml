@@ -95,7 +95,7 @@ This is equivalent to the kernel matrix being \textbf{positive semi-definite}.
     \langle \Phi(x), \Phi(x') \rangle_{\mathbb{R}^d}$ is p.d.
 \end{itemize} 
 
-\begin{Theorem}{Aronszajn, 1950}{}
+\begin{Theorem}{Aronszajn, 1950}{aronszajn}
     $K$ is a p.d. kernel on the set $\mathcal{X}$ if and only if there exists a 
     \textbf{Hilbert space $\mathcal{H}$ and a mapping $\Phi : \mathcal{X} 
     \rightarrow \mathcal{H}$} such that, for any $x$, $x'$ in $\mathcal{X}$:
@@ -185,10 +185,55 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
    = \left\lVert \sum_i a_i K_{x_i} \right\rVert^2_\mathcal{H} \geq 0$
 
   \vspace{10pt}
-  ($\Rightarrow$) 
+  ($\Rightarrow$) Let $\mathcal{H}_0$ be the subspace spanned by the functions 
+  $(K_x)_{x\in \mathcal{X}}$. If $f = \sum_i a_i K_{x_i}$ and $g =
+  \sum_j b_j K_{y_j}$. Let (not an inner product yet)
+  \begin{align*}
+    \langle f, g\rangle_{\mathcal{H}_0} &= \sum_{i,j}a_i b_j K(x_i, y_j)\\
+    &= \sum_i a_i g(x_i)\\
+    &= \sum_j b_j f(y_j)
+  \end{align*}
+  ($\langle f,g \rangle_{\mathcal{H}_0}$ does not depend on the expansion of $f$
+  or $g$) For any $x\in \mathcal{X}$ and $f \in \mathcal{H}_0$, $\langle f,K_x 
+  \rangle_{\mathcal{H}_0} = f(x)$.
+
+  \begin{align*}
+    \lVert f \rVert^2_{\mathcal{H}_0} = \sum_{i,j} a_i a_j K(x_i, x_j) \geq 0
+  \end{align*}
+  And since Cauchy-Schwarz is valid, 
+  \begin{align*}
+    |f(x)| = |\langle f, K_x \rangle_{\mathcal{H}_0}| \leq \lVert f 
+    \rVert_{\mathcal{H}_0}\cdot K(x,x)^{\frac{1}{2}}
+  \end{align*}
+  Therefore $\lVert f \rVert_{\mathcal{H}_0} = 0 \implies f = 0$. $\langle ., .
+  \rangle$ is an inner product on $\mathcal{H}_0$. 
+
+  For a Cauchy sequence $(f_n)_{n\geq 0}$, 
+  \begin{align*}
+    |f_m(x) - f_n(x)| \leq \lVert f_m - f_n \rVert_{\mathcal{H}_0} \cdot
+    K(x, x)^{\frac{1}{2}}
+  \end{align*}
+  For any $x$ the sequence $(f_n(x))$ is Cauchy in $\mathbb{R}$ and therefore
+  converges. 
+
+  If the functions defined as the point-wise limits of Cauchy sequences are
+  added $\mathcal{H}_0$, it becomes a Hilbert space with $K$ as r.k..
+\end{Proof}
+
+\begin{Proof}{of Aronszajn's theorem}{}
+  If $K$ is p.d. over a set $\mathcal{X}$, it is the r.k. of a Hilbert space 
+  $\mathcal{H}$. The mapping $\Phi$ is defined by $\forall x \in \mathcal{X}, 
+  \quad \Phi(x) = K_x$.
+
+  By the reproducing property 
+  \begin{align*}
+    \forall (x,y)\in \mathcal{X}^2,\quad \langle \Phi(x), \Phi(y) 
+    \rangle_\mathcal{X} = \langle K_x, K_y \rangle_\mathcal{X} = K(x, y)
+  \end{align*}
 \end{Proof}
 
 \subsection{Examples}
+\subsubsection{Linear Kernel}
 
 %%---------------------------------
 \section{Kernel tricks}
