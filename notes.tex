@@ -5,57 +5,8 @@
 \usepackage{parskip}
 \usepackage{cleveref}
 \usepackage[most]{tcolorbox}
+\usepackage{boxedthms}
 \usepackage{hyperref}
-
-\newtcbtheorem{Theorem}{Theorem}{
-  enhanced,
-  sharp corners,
-  center,
-  leftrule=1mm,
-  width=.9\linewidth,
-  attach boxed title to top left={
-    yshifttext=-1mm
-  },
-  colback=white,
-  colframe=black!50!white,
-  fonttitle=\bfseries,
-  boxed title style={
-    sharp corners,
-    size=small,
-    colback=black!50!white,
-    colframe=black!50!white,
-  } 
-}{thm}
-
-\newtcbtheorem{Definition}{Definition}{
-  enhanced,
-  sharp corners,
-  center,
-  leftrule=1mm,
-  width=.9\linewidth,
-  attach boxed title to top left={
-    yshifttext=-1mm
-  },
-  colback=white,
-  colframe=black!25!white,
-  fonttitle=\bfseries,
-  boxed title style={
-    sharp corners,
-    size=small,
-    colback=black!25!white,
-    colframe=black!25!white,
-  } 
-}{def}
-
-\newtcbtheorem{Proof}{Proof}{
-  enhanced,
-  sharp corners,
-  colback=white,
-  colframe=black!5!white,
-  coltitle=black,
-  fonttitle=\bfseries,
-  breakable,
-}{prf}
 
 
 \title{Kernel Methods in Machine Learning - Course Notes}
@@ -64,6 +15,7 @@
 
 \begin{document}
 \maketitle
+\tableofcontents
 
 \section{Kernels and RKHS}
 
@@ -158,17 +110,42 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
 
 
 \subsection{Examples}
+
+\subsubsection{Steps for finding the RKHS of a Kernel}
+\begin{enumerate}
+  \item Look for an \textbf{inner product} ($K(x, y) = \langle \Phi(x), \Phi(y)
+  \rangle_\mathcal{H}$)
+  \item Propose a \textbf{candidate RKHS} $\mathcal{H}$
+  \item Check that the candidate $\mathcal{H}$ is a \textbf{Hilbert space} (
+  inner product and complete)
+  \item Check that $\mathcal{H}$ is \textbf{the RKHS}
+  \begin{itemize}
+    \item $\mathcal{H}$ contains all the functions $K_x : t \mapsto K(x,t)$
+    \item For all $f \in \mathcal{H}$ and $x\in \mathcal{X}$, $f(x) = \langle
+    f, K_x \rangle_\mathcal{H}$.
+  \end{itemize}
+\end{enumerate}
+
 \subsubsection{Linear Kernel}
 
-\begin{Definition}{}{}
+\begin{Definition}{Linear Kernel}{}
   In $\mathbb{R}^d$, the linear kernel is defined by $K(x, y) = \langle x, y 
   \rangle_{\mathbb{R}^d}$
 \end{Definition}
 
-\begin{Theorem}{}{}
-  
+\begin{Theorem}{RKHS of a linear Kernel}{}
+  The RKHS of the linear kernel is the set of linear functions of the form 
+  $f_w(x) = \langle w,x \rangle_{\mathbb{R}^d}$ for $w \in \mathbb{R}^d$,
+  endowed with the inner product $\langle f_w,f_v \rangle_\mathcal{H} = 
+  \langle w,v \rangle_{\mathbb{R}^d}$
 \end{Theorem}
 
+\subsubsection{Polynomial Kernel}
+
+\begin{Definition}{Polynomial Kernel}{}
+  In $\mathbb{R}^d$, the linear kernel is defined by $K(x, y) = \langle x, y 
+  \rangle_{\mathbb{R}^d}^2$
+\end{Definition}
 %%---------------------------------
 \section{Kernel tricks}
 
