@@ -8,14 +8,15 @@
 \usepackage{boxedthms}
 \usepackage{hyperref}
 
-
 \title{Kernel Methods in Machine Learning - Course Notes}
 \author{Hugo Cisneros}
 \date{}
 
 \begin{document}
 \maketitle
+\setcounter{tocdepth}{2}
 \tableofcontents
+
 
 \section{Kernels and RKHS}
 
@@ -56,8 +57,9 @@ This is equivalent to the kernel matrix being \textbf{positive semi-definite}.
     \begin{align*}
         \boxed{K(x, x') = \langle \Phi(x), \Phi(x') \rangle_\mathcal{H}}
     \end{align*}
+    \par \hfill \hyperref[prf:aronszajn]{\small Proof}.
 \end{Theorem}
-\hyperref[prf:aronszajn]{\small Proof}.
+
 
 (A Hilbert space is a vector space with an inner product and complete for the 
 corresponding norm).
@@ -89,8 +91,9 @@ If there exists a r.k., $\mathcal{H}$ is called a RKHS.
         & f \mapsto f(x)
     \end{align*}
     is \textbf{continuous}.
+    \par \hfill \hyperref[prf:rkhs]{\small Proof}.
 \end{Theorem}
-\hyperref[prf:rkhs]{\small Proof}.
+
 
 As a corollary, convergence in a RKHS implies point-wise convergence.
 
@@ -98,15 +101,17 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
 \begin{Theorem}{Uniqueness of RKHS}{unique_rkhs}
   If $\mathcal{H}$ is a RKHS, it has a \textbf{unique r.k.}, and a function $K$
   can be \textbf{the r.k of at most one RKHS}.
+  \par \hfill \hyperref[prf:unique_rkhs]{\small Proof}.
 \end{Theorem}
-\hyperref[prf:unique_rkhs]{\small Proof}.
+
 
 
 \begin{Theorem}{}{pdrk}
   A function $K : \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ is 
   \textbf{p.d. if and only if it is a r.k.}.
+  \par \hfill \hyperref[prf:pdrk]{\small Proof}.
 \end{Theorem}
-\hyperref[prf:pdrk]{\small Proof}.
+
 
 
 \subsection{Examples}
@@ -133,7 +138,7 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
   \rangle_{\mathbb{R}^d}$
 \end{Definition}
 
-\begin{Theorem}{RKHS of a linear Kernel}{}
+\begin{Theorem}{RKHS of a linear Kernel}{lin_rkhs}
   The RKHS of the linear kernel is the set of linear functions of the form 
   $f_w(x) = \langle w,x \rangle_{\mathbb{R}^d}$ for $w \in \mathbb{R}^d$,
   endowed with the inner product $\langle f_w,f_v \rangle_\mathcal{H} = 
@@ -143,11 +148,58 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
 \subsubsection{Polynomial Kernel}
 
 \begin{Definition}{Polynomial Kernel}{}
-  In $\mathbb{R}^d$, the linear kernel is defined by $K(x, y) = \langle x, y 
+  In $\mathbb{R}^d$, the polynomial kernel is defined by $K(x, y) = \langle x, y 
   \rangle_{\mathbb{R}^d}^2$
 \end{Definition}
+
+\begin{Theorem}{RKHS of a polynomial Kernel}{poly_rkhs}
+  The RKHS $\mathcal{H}$ of the polynomial kernel is the set of quadratic 
+  functions of the form $f_S(x) = x^T S x$ for $S \in \mathcal{S}^{d\times d}$ 
+\end{Theorem}
+
+\subsubsection{Properties of kernels} 
+
+If $K_1$, $K_2$ are p.d. kernels, 
+\begin{itemize}
+  \item $K_1 + K_2$ is a p.d. kernel
+  \item $K_1\cdot K_2$ is a p.d. kernel
+  \item $cK_1$ for $c\geq 0$ is a p.d. kernel
+  \item The point-wise limits of a sequence of p.d. kernels is a p.d kernel.
+  \item $\exp(K_1)$ is a p.d. kernel
+\end{itemize}
+
+\textbf{Small norms in the RKHS space means slow variations in the original
+space $\mathcal{X}$ with respect to the geometry defined by the kernel.}
 %%---------------------------------
 \section{Kernel tricks}
+
+\subsection{Kernel trick}
+\textbf{Statement:} All expression of vectors that can be written in terms of 
+pairwise inner products can be transposed to a infinite dimensional space by 
+replacing inner products with kernel evaluations. 
+
+\subsection{Representer theorem}
+
+\begin{Theorem}{Representer theorem}{representer}
+  Let $\mathcal{X}$ a set with a p.d. kernel $K$ and corresponding RKHS 
+  $\mathcal{H}$, $S = \{x_1, ..., x_n\} \subset \mathcal{X}$ a set of points of 
+  $\mathcal{X}$.
+
+  Let $\Phi : \mathbb{R}^{n+1} \rightarrow \mathbb{R}$ a function strictly 
+  increasing w.r.t. the last variable.
+
+  Any solution to the optimization problem
+  \begin{align*}
+    \min_{f\in \mathcal{H}} \Phi(f(x_1), ..., f(x_n), \lVert f
+    \rVert_\mathcal{H})
+  \end{align*}
+  admits a representation in the form 
+  \begin{align*}
+    \forall x \in \mathcal{X}, f(x) = \sum_{i=1}^n \alpha_i K(x_i, x)
+  \end{align*}
+
+  \par\hfill \hyperref[prf:representer]{\small Proof}
+\end{Theorem}
 
 %%---------------------------------
 \section{Kernel Methods: Supervised Learning}
@@ -292,6 +344,11 @@ As a corollary, convergence in a RKHS implies point-wise convergence.
   \end{align*}
 \end{Proof}
 
+\begin{Proof}{of the \hyperref[thm:representer]{Representer theorem}}
+  {representer}
+
+  
+\end{Proof}
 
 \subsection{The Kernel Jungle}
 

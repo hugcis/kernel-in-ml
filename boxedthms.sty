@@ -5,8 +5,9 @@
   leftrule=1mm,
   width=.9\linewidth,
   attach boxed title to top left={
-    yshifttext=-1mm
+    yshifttext=-1mm,
   },
+  separator sign dash,
   colback=white,
   colframe=black!50!white,
   fonttitle=\bfseries,
@@ -15,7 +16,7 @@
     size=small,
     colback=black!50!white,
     colframe=black!50!white,
-  } 
+  }
 }{thm}
 
 \newtcbtheorem{Definition}{Definition}{
@@ -35,7 +36,8 @@
     size=small,
     colback=black!25!white,
     colframe=black!25!white,
-  } 
+  },
+  separator sign dash
 }{def}
 
 \newtcbtheorem{Proof}{Proof}{
@@ -46,4 +48,6 @@
   coltitle=black,
   fonttitle=\bfseries,
   breakable,
+  separator sign none,
+  theorem name
 }{prf}
