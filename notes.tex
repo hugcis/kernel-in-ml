@@ -1,6 +1,7 @@
 \documentclass[10pt]{article}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage[margin=1in]{geometry}
 \usepackage{parskip}
 \usepackage{cleveref}
@@ -233,7 +234,7 @@ Effects of regularization:
 
 The problem can be re-written 
 \begin{align*}
-  \hat{f} = \arg\min_{\alpha \in \mathbb{R}^n}\frac{1}{n}
+  \hat{\alpha} = \arg\min_{\alpha \in \mathbb{R}^n}\frac{1}{n}
   (\mathbf{K}\alpha - y)^T (\mathbf{K}\alpha - y) + \lambda\alpha^T\mathbf{K}
   \alpha
 \end{align*}
@@ -249,9 +250,44 @@ function $f$.)
 
 \subsection{Kernel logistic regression}
 
+\begin{align*}
+  \hat{f} = \arg\min_{f\in \mathcal{H}} \frac{1}{n}\sum_{i=1}^n \log\left(1 + 
+  \exp(-y_if(x_i))\right) + \lambda\lVert f\rVert^2_\mathcal{H}
+\end{align*} 
 
+This problem can also be reformulated in terms of the Gram matrix of the kernel
+and a parameter $\alpha$
 
-\subsection{Largse-margin classifiers}
+\begin{align*}
+  \min_{\alpha \in \mathbb{R}^n} J(\alpha) \triangleq \frac{1}{n}\sum_{i=1}^n 
+  \log\left(1 + \exp(-y_i[\mathbf{K}\alpha]_i)\right) + \frac{\lambda}{2}
+  \alpha^T\mathbf{K}\alpha
+\end{align*} 
+
+By writing and computing the terms of the Taylor expansion of $J$ near a point 
+$\alpha_0$, we can explicitly solve the problem with Newton's method. 
+\begin{align*}
+  J_q(\alpha) = J(\alpha_0) + (\alpha - \alpha_0)^T \nabla J(\alpha_0) + 
+  \frac{1}{2} (\alpha - \alpha_0)^T \nabla^2J(\alpha_0)(\alpha - \alpha_0)
+\end{align*}
+\begin{align*}
+  \nabla J(\alpha) = \frac{1}{n}\mathbf{KP}(\alpha)y+ \lambda\mathbf{K}\alpha\\
+  \nabla^2 J(\alpha) =  \frac{1}{n}\mathbf{KW}(\alpha)\mathbf{K} + \lambda 
+  \mathbf{K}
+\end{align*}
+where $\mathbf{P}(\alpha) = \text{diag}(\ell'_{\text{logistic}}(y_i 
+[\mathbf{K}\alpha]_i))$ and $\mathbf{W}(\alpha) = \text{diag}(
+\ell''_{\text{logistic}}(y_i [\mathbf{K}\alpha]_i))$. By developing the 
+approximation, we obtain the following equality
+\begin{align*}
+  2J_q(\alpha) = \frac{1}{n}(\mathbf{K}\alpha - z)^T \mathbf{w}
+  (\mathbf{K}\alpha - z) + \lambda \alpha^T \mathbf{K}\alpha + C
+\end{align*}
+with $z = (\mathbf{K}\alpha_0 - \mathbf{W^{-1}}\mathbf{P}y)$. This is exactly 
+the formulation of a weighted kernel ridge regression problem. This problem can
+be iteratively solved by updating $W^t$ and $z^t$ until convergence (kernel
+IRLS).
+\subsection{Large-margin classifiers}
 
 %%---------------------------------
 \section{Kernel Methods: Unsupervised Learning}
