@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage[margin=1in]{geometry}
@@ -201,8 +201,57 @@ replacing inner products with kernel evaluations.
   \par\hfill \hyperref[prf:representer]{\small Proof}
 \end{Theorem}
 
+One of the main consequences of the theorem is that problems of the form 
+\begin{align*}
+  \min_{f\in \mathcal{H}} \Phi(f(x_1), ..., f(x_n), \lVert f
+  \rVert_\mathcal{H})
+\end{align*}
+can be re-written as 
+\begin{align*}
+  \min_{\alpha\in \mathbb{R}^n} \Phi([\mathbf{K}\alpha]_1, ..., 
+  [\mathbf{K}\alpha]_n, \alpha^T \mathbf{K} \alpha)
+\end{align*}
+which is a n-dimensional optimization problem (instead of a possibly infinite 
+dimensional one).
+
 %%---------------------------------
 \section{Kernel Methods: Supervised Learning}
+
+\subsection{Kernel Ridge regression}
+
+The problem can be described as minimizing a RKHS norm regularized MSE criterion
+\begin{align*}
+  \hat{f} = \arg\min_{f\in \mathcal{H}} \frac{1}{n}\sum_{i=1}^n(y_i - f(x_i))^2
+  + \lambda\lVert f\rVert^2_\mathcal{H}
+\end{align*} 
+
+Effects of regularization: 
+\begin{itemize}
+  \item \textbf{Penalize non smooth functions} (avoid overfitting)
+  \item \textbf{Simplify the solution} (representer theorem)
+\end{itemize}
+
+The problem can be re-written 
+\begin{align*}
+  \hat{f} = \arg\min_{\alpha \in \mathbb{R}^n}\frac{1}{n}
+  (\mathbf{K}\alpha - y)^T (\mathbf{K}\alpha - y) + \lambda\alpha^T\mathbf{K}
+  \alpha
+\end{align*}
+
+One solution is to take 
+\begin{align*}
+  \alpha = (\mathbf{K} + \lambda n \mathbf{I})^{-1} y
+\end{align*}
+
+(Uniqueness: If $\mathbf{K}$ is singular, all $\alpha + \varepsilon$ with 
+$\varepsilon \in \text{Ker}(\mathbf{K})$ are solutions leading to the same 
+function $f$.)
+
+\subsection{Kernel logistic regression}
+
+
+
+\subsection{Largse-margin classifiers}
 
 %%---------------------------------
 \section{Kernel Methods: Unsupervised Learning}
@@ -346,8 +395,30 @@ replacing inner products with kernel evaluations.
 
 \begin{Proof}{of the \hyperref[thm:representer]{Representer theorem}}
   {representer}
-
+  Let $\xi(f)$ the functional that is minimized in the optimization problem of 
+  the  theorem, and $\mathcal{H}_\mathcal{S}$ the linear span of all the 
+  $K_{x_i}$ functions. 
   
+  Since $\mathcal{H}_\mathcal{S}$ is a finite dimensional space, every function 
+  $f\in\mathcal{H}$ can be decomposed as $f = f_\mathcal{S} + f_\perp$, with 
+  $f_S$ the orthogonal projection of f on $\mathcal{H}_\mathcal{S}$.
+
+  Because $\mathcal{H}$ is a RKHS, 
+  \begin{align*}
+    \forall i \leq n,\quad f_\perp(x_i) = \langle f_\perp, K_{x_i} 
+    \rangle_\mathcal{H} = 0
+  \end{align*}
+  Therefore 
+  \begin{align*}
+    \forall  i \leq n,\quad f(x_i) = f_\mathcal{S}(x_i)
+  \end{align*}
+  From Pythagora's theorem in $\mathcal{H}$, $\lVert f\rVert^2_\mathcal{H} = 
+  \lVert f_\mathcal{S}\rVert^2_\mathcal{H} + \lVert f_\perp
+  \rVert^2_\mathcal{H}$.
+
+  We therefore have $\xi(f) \geq \xi(f_\mathcal{S})$ with equality if and only
+  if $\lVert f_\perp\rVert^2_\mathcal{H} = 0$, the minimum belongs to 
+  $\mathcal{H}_\mathcal{S}$.
 \end{Proof}
 
 \subsection{The Kernel Jungle}
