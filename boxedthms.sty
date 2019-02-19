@@ -16,8 +16,31 @@
     size=small,
     colback=black!50!white,
     colframe=black!50!white,
-  }
+  },
+  breakable,
 }{thm}
+
+\newtcbtheorem{Proposition}{Proposition}{
+  enhanced,
+  sharp corners,
+  center,
+  leftrule=1mm,
+  width=.9\linewidth,
+  attach boxed title to top left={
+    yshifttext=-1mm,
+  },
+  separator sign dash,
+  colback=white,
+  colframe=black!40!white,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=black!40!white,
+    colframe=black!40!white,
+  },
+  breakable,
+}{pro}
 
 \newtcbtheorem{Definition}{Definition}{
   enhanced,
@@ -37,7 +60,8 @@
     colback=black!25!white,
     colframe=black!25!white,
   },
-  separator sign dash
+  separator sign dash,
+  breakable,
 }{def}
 
 \newtcbtheorem{Proof}{Proof}{

@@ -287,10 +287,86 @@ with $z = (\mathbf{K}\alpha_0 - \mathbf{W^{-1}}\mathbf{P}y)$. This is exactly
 the formulation of a weighted kernel ridge regression problem. This problem can
 be iteratively solved by updating $W^t$ and $z^t$ until convergence (kernel
 IRLS).
-\subsection{Large-margin classifiers}
+
+\subsection{Support vector machines (SVM)}
+
+\begin{Definition}{Hinge loss}{}
+  The Hinge loss is a function $\mathbb{R} \rightarrow \mathbb{R}_+$ defined by 
+  \begin{align*}
+    \varphi_\text{hinge}(u) = \max(0, 1-u) = \begin{cases}
+      0\quad \text{if}\ u \geq 1\\
+      1-u \quad \text{otherwise}
+    \end{cases}
+  \end{align*} 
+\end{Definition}
+
+\begin{Definition}{SVM problem}{}
+  SVM is the large margin classifier that solves
+  \begin{align*}
+    \min_{f\in \mathcal{H}}\left\{ \frac{1}{n}\sum_{i=1}^n 
+    \varphi_{\text{hinge}}(y_i f(x_i)) + \lambda \lVert f\rVert_\mathcal{H}^2
+    \right\}
+  \end{align*}
+  It can be reformulated by using the Representer theorem as 
+  \begin{align*}
+    \min_{\alpha \in \mathbb{R}^n}\left\{ \frac{1}{n}\sum_{i=1}^n 
+    \varphi_{\text{hinge}}(y_i [\mathbf{K}\alpha]_i) + \lambda \alpha^T
+    \mathbf{K}\alpha \right\}
+  \end{align*}
+  Then, by introducing slack variables and using the definition of the Hinge 
+  loss, the following formulation is obtained 
+  \begin{align*}
+    \hat{f}(x) = \sum_{i=1}^n \hat{\alpha}_i K(x_i, x)
+  \end{align*}
+  where $\hat{\alpha}$ solves
+  \begin{equation*}
+  \begin{aligned}
+    &\min_{\alpha \in \mathbb{R}^n,\xi\in \mathbb{R}^n} & & \frac{1}{n}
+    \sum_{i=1}^n \xi_i +\lambda \alpha^T \mathbf{K}\alpha \\
+    &\text{s.t.} & & y_i [\mathbf{K}\alpha]_i+ \xi_i - 1 \geq 0, \quad 
+    \forall i\\
+    & & & \xi_i \geq 0 , \quad \forall i
+  \end{aligned}
+  \end{equation*}
+\end{Definition}
 
 %%---------------------------------
 \section{Kernel Methods: Unsupervised Learning}
+
+\subsection{Kernel K-means and spectral clustering}
+
+The objective is similar to K-means, but transposed in the RKHS. Given data
+points $x_1, ..., x_n$ and a p.d. kernel $K$ and RKHS $\mathcal{H}$ the
+objective reads
+\begin{align*}
+  \min_{\substack{\mu_j \in \mathcal{H} \quad \forall j \leq k \\ s_i \in 
+  \{1, ... k\}
+  \quad \forall i \leq n}}\sum_{i=1}^n \lVert \varphi(x_i) - \mu_{s_i}
+  \rVert^2_\mathcal{H}
+\end{align*}.
+
+\begin{Proposition}{}{center}
+  The center of mass $\varphi_n = \frac{1}{n}\sum_{i=1}^n\varphi(x_i)$ solves
+  the optimization problem
+  \begin{align*}
+    \min_{\mu \in \mathcal{H}}\sum_{i=1}^n\lVert \varphi(x_i) - \mu 
+    \rVert^2_\mathcal{H}
+  \end{align*}
+  \par \hfill \hyperref[prf:center]{\small Proof.}
+\end{Proposition}
+
+\paragraph{Greedy (K-means) approach:}
+\begin{description}
+  \item[Centroid update] Given a centroid assignment, update the centroids 
+  \begin{align*}
+    \forall j,\quad \mu_j = \frac{1}{|C_j|}\sum_{i\in C_j}\varphi(x_i)
+  \end{align*} 
+  \item[Cluster assignment] 
+\end{description}
+
+\subsection{Kernel PCA}
+
+\subsection{A quick note on kernel CCA}
 
 %%---------------------------------
 \section{The Kernel Jungle}
@@ -429,6 +505,8 @@ IRLS).
   \end{align*}
 \end{Proof}
 
+\subsection{Kernels Tricks}
+
 \begin{Proof}{of the \hyperref[thm:representer]{Representer theorem}}
   {representer}
   Let $\xi(f)$ the functional that is minimized in the optimization problem of 
@@ -455,6 +533,23 @@ IRLS).
   We therefore have $\xi(f) \geq \xi(f_\mathcal{S})$ with equality if and only
   if $\lVert f_\perp\rVert^2_\mathcal{H} = 0$, the minimum belongs to 
   $\mathcal{H}_\mathcal{S}$.
+\end{Proof}
+
+\subsection{Kernel Methods: Unsupervised Learning}
+
+\begin{Proof}{of Proposition \ref{pro:center}}{center}
+  \begin{align*}
+    \frac{1}{n}\sum_{i=1}^n \lVert \varphi(x_i) - \mu \rVert^2_\mathcal{H} & =
+    \frac{1}{n}\sum_{i=1}^n \lVert \varphi(x_i)\rVert^2_\mathcal{H} - \left
+    \langle \frac{2}{n}\sum_{i=1}^n\varphi(x_i), \mu \right\rangle_\mathcal{H} 
+    + \lVert\mu \rVert^2_\mathcal{H}\\
+    & = \frac{1}{n}\sum_{i=1}^n \lVert \varphi(x_i)\rVert^2_\mathcal{H} - 2 
+    \langle \varphi_n, \mu \rangle_\mathcal{H} + \lVert\mu \rVert^2_\mathcal{H}
+    \\
+    & = \frac{1}{n}\sum_{i=1}^n \lVert \varphi(x_i)\rVert^2_\mathcal{H} - \lVert
+    \varphi_n \rVert^2_\mathcal{H} + \lVert \varphi_n - \mu \rVert^2_\mathcal{H}
+  \end{align*}
+  which is minimum for $\varphi_n = \mu$.
 \end{Proof}
 
 \subsection{The Kernel Jungle}
