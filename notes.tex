@@ -361,15 +361,75 @@ objective reads
   \begin{align*}
     \forall j,\quad \mu_j = \frac{1}{|C_j|}\sum_{i\in C_j}\varphi(x_i)
   \end{align*} 
-  \item[Cluster assignment] 
+  \item[Cluster assignment] For $\mu_1, ..., \mu_k$ centers of mass assign each 
+  $x_i$ to the closest centroid. 
+  \begin{align*}
+    s_i \in \arg\,\min_{s\in \{1, ..., k\}} \lVert \varphi(x_i) - \mu_s 
+    \rVert^2_{\mathcal{H}}
+  \end{align*}  
 \end{description}
 
-\subsection{Kernel PCA}
+\begin{Proposition}{}{}
+  The equivalent objective to the kernel k-means algorithm is 
+  \begin{align*}
+    \max_{s_i\in{1,...,k} \forall i}\sum_{l=1}^k \frac{1}{|C_l|}\sum_{i,j \in 
+    C_l} K(x_i, x_j)
+  \end{align*}
+\end{Proposition}
+The above problem is a combinatorial optimization problem. The greedy algorithm 
+(kernel K-means) approximates its solution but spectral clustering can also be
+used. 
 
-\subsection{A quick note on kernel CCA}
+\textbf{Idea: } Introduce $\mathbf{A} \in \{0, 1\}^{n\times k}$ the binary 
+assignment matrix and $\mathbf{D} \in \mathbb{R}^k$ a diagonal matrix with 
+diagonal elements the inverse of cardinality of corresponding cluster. The 
+objective becomes
+\begin{align*}
+  \max_{\mathbf{A}, \mathbf{D}} \ \text{tr}(\mathbf{D}^{1/2}\mathbf{A}^T
+  \mathbf{K}\mathbf{A}\mathbf{D}^{1/2})
+\end{align*}
+such that the two matrices verify the properties implied by their definition. 
+One can define $\mathbf{Z} = \mathbf{A}\mathbf{D}^{1/2}$ and the objective 
+becomes
+\begin{align*}
+  \max_{\mathbf{Z}} \ \text{tr}(\mathbf{Z}^T \mathbf{K}\mathbf{Z})\quad
+   \text{s.t.}\quad\mathbf{Z}^T\mathbf{Z} = \mathbf{I}
+\end{align*} 
+This can be solved by finding the eigenvectors of $\mathbf{K}$ with $k$ largest 
+eigenvalues. Then, $\mathbf{Z}^*$ is used to find the best cluster assignment.
+
+\subsection{Kernel PCA}
+Assumption: data are centered w.r.t the kernel, i.e $ \frac{1}{n}\sum_{i=1}^n
+\varphi(x_i) = 0$.
+The orthogonal projection onto a direction $f$ in $\mathcal{H}$ is written 
+$h_f(x) = \left\langle \varphi(x), \frac{f}{\lVert f\rVert_\mathcal{H}} 
+\right\rangle_\mathcal{H}$
+
+The empirical variance captured by a direction $f$ is 
+\begin{align*}
+  \text{Var}(h_f) = \frac{1}{n}\sum_{i=1}^n\frac{\langle \varphi(x_i), f 
+  \rangle^2_\mathcal{H}}{\lVert f\rVert_\mathcal{H}^2} = 
+  \frac{1}{n}\sum_{i=1}^n\frac{f(x_i)^2}{\lVert f\rVert_\mathcal{H}^2}
+\end{align*}
+and the $i$-th principal direction is 
+\begin{align*}
+  f_i = \arg\,\max_{f \perp {f_1, ..., f_{i-1}}} \text{Var}(h_f) = 
+  \sum f(x_i)^2
+   \quad 
+  \text{s.t.}  \quad \lVert f\rVert_\mathcal{H} = 1
+\end{align*}
+
+In practice: 
+\begin{enumerate}
+  \item Center the Gram matrix
+  \item Compute the required number of eigenvectors/values $(u_i, \Delta_i)$
+  \item Normalize $\alpha_i = \frac{u_i}{\sqrt{\Delta_i}}$
+  \item Project onto the $i$-th eigenvectors by computing $\mathbf{K}\alpha_i$
+\end{enumerate}
 
 %%---------------------------------
 \section{The Kernel Jungle}
+
 \subsection{Green, Mercer, Herglotz, Bochner and friends}
 
 \subsubsection{Green Kernel}
