@@ -4,6 +4,7 @@
 \usepackage{amssymb}
 \usepackage{dsfont}
 \usepackage{parskip}
+\usepackage{mathtools}
 
 \title{\Large Kernel methods in machine learning --- Homework 1}
 \author{Hugo Cisneros}
@@ -64,57 +65,58 @@
     kernels and because $\alpha$ and $\beta$ are positive scalars. Let 
     $\mathcal{H}_1$ and $\mathcal{H}_2$ be their respective RKHS.
 
-    Since, $K_1$ and $K_2$ are p.d., by Aronszajn's theorem there exist 
-    $\Phi_1, \Phi_2$ mappings from $\mathcal{X}$ to $\mathcal{H}_1$ and 
-    $\mathcal{H}_2$ such that $\forall x,y \in \mathbb{R}^2$
-    \begin{align*}
-        K(x,y) &\triangleq \alpha K_1(x,y) + \beta K_2(x, y)\\
-        &= \langle \sqrt{\alpha}\Phi_1(x),\sqrt{\alpha}\Phi_1(y) 
-        \rangle_{\mathcal{H}_1} + \langle\sqrt{\beta} \Phi_2(x),
-        \sqrt{\beta}\Phi_2(y) \rangle_{\mathcal{H}_2}\\
-        & = \langle \Phi(x), \Phi(y) \rangle_{\mathcal{H}}
-    \end{align*}
-    Where $\langle.,.\rangle_{\mathcal{H}}$ is defined above and
-    \begin{align*}
-        \Phi & :\mathcal{X} \rightarrow \mathcal{H} \triangleq \sqrt{\alpha}
-        \mathcal{H}_1 + \sqrt{\beta} \mathcal{H}_2\\
-        &\quad x\mapsto \sqrt{\alpha} \Phi_1(x) + \sqrt{\beta} \Phi_2(x)
-    \end{align*}
-    $\langle.,.\rangle_{\mathcal{H}}$ is clearly an inner product. And for any
-    $(x_n)_{n\in\mathbb{N}}$ sequence of $\mathcal{H}$, we have that 
-    $\forall n \in \mathbb{N},x_n = \sqrt{\alpha} x_{1,n} + \sqrt{\beta} 
-    x_{2,n}$ and $\forall n,m \in \mathbb{N}$
-    \begin{align*}
-        \lVert x_n - x_m \rVert^2_\mathcal{H} &= \lVert \sqrt{\alpha} (x_{1,n} - 
-        x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m})\rVert^2_\mathcal{H}\\
-        &= \langle \sqrt{\alpha} (x_{1,n} - 
-        x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m}), \sqrt{\alpha} (x_{1,n} - 
-        x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m}) \rangle_{\mathcal{H}}\\
-        &= \alpha \langle x_{1,n} - x_{1,m}, x_{1,n} - x_{1,m} 
-        \rangle_{\mathcal{H}_1} + \beta \langle x_{2,n} - x_{2,m}, x_{2,n} - 
-        x_{2,m}  \rangle_{\mathcal{H}_2} \tag{by definition of 
-        $\langle.,.\rangle_{\mathcal{H}}$}\\
-        &= \alpha \lVert x_{1,n} - x_{1,m} \rVert^2_{\mathcal{H}_1} +
-        \beta \lVert x_{2,n} - x_{2,m} \rVert^2_{\mathcal{H}_2}
-    \end{align*}
-    Therefore, if $(x_n)$ is a Cauchy sequence, $(x_{1,n})$ and  $(x_{2,n})$ 
-    are also  Cauchy sequences. Because $\mathcal{H}_1$ and $\mathcal{H}_2$ 
-    are Hilbert spaces, the two sequences converge and $(x_n)$ converges. 
-    \textbf{$\mathcal{H}$ is a Hilbert space}.
+    
+    % Since, $K_1$ and $K_2$ are p.d., by Aronszajn's theorem there exist 
+    % $\Phi_1, \Phi_2$ mappings from $\mathcal{X}$ to $\mathcal{H}_1$ and 
+    % $\mathcal{H}_2$ such that $\forall x,y \in \mathbb{R}^2$
+    % \begin{align*}
+    %     K(x,y) &\triangleq \alpha K_1(x,y) + \beta K_2(x, y)\\
+    %     &= \langle \sqrt{\alpha}\Phi_1(x),\sqrt{\alpha}\Phi_1(y) 
+    %     \rangle_{\mathcal{H}_1} + \langle\sqrt{\beta} \Phi_2(x),
+    %     \sqrt{\beta}\Phi_2(y) \rangle_{\mathcal{H}_2}\\
+    %     & = \langle \Phi(x), \Phi(y) \rangle_{\mathcal{H}}
+    % \end{align*}
+    % Where $\langle.,.\rangle_{\mathcal{H}}$ is defined above and
+    % \begin{align*}
+    %     \Phi & :\mathcal{X} \rightarrow \mathcal{H} \triangleq \sqrt{\alpha}
+    %     \mathcal{H}_1 + \sqrt{\beta} \mathcal{H}_2\\
+    %     &\quad x\mapsto \sqrt{\alpha} \Phi_1(x) + \sqrt{\beta} \Phi_2(x)
+    % \end{align*}
+    % $\langle.,.\rangle_{\mathcal{H}}$ is clearly an inner product. And for any
+    % $(x_n)_{n\in\mathbb{N}}$ sequence of $\mathcal{H}$, we have that 
+    % $\forall n \in \mathbb{N},x_n = \sqrt{\alpha} x_{1,n} + \sqrt{\beta} 
+    % x_{2,n}$ and $\forall n,m \in \mathbb{N}$
+    % \begin{align*}
+    %     \lVert x_n - x_m \rVert^2_\mathcal{H} &= \lVert \sqrt{\alpha} (x_{1,n} - 
+    %     x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m})\rVert^2_\mathcal{H}\\
+    %     &= \langle \sqrt{\alpha} (x_{1,n} - 
+    %     x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m}), \sqrt{\alpha} (x_{1,n} - 
+    %     x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m}) \rangle_{\mathcal{H}}\\
+    %     &= \alpha \langle x_{1,n} - x_{1,m}, x_{1,n} - x_{1,m} 
+    %     \rangle_{\mathcal{H}_1} + \beta \langle x_{2,n} - x_{2,m}, x_{2,n} - 
+    %     x_{2,m}  \rangle_{\mathcal{H}_2} \tag{by definition of 
+    %     $\langle.,.\rangle_{\mathcal{H}}$}\\
+    %     &= \alpha \lVert x_{1,n} - x_{1,m} \rVert^2_{\mathcal{H}_1} +
+    %     \beta \lVert x_{2,n} - x_{2,m} \rVert^2_{\mathcal{H}_2}
+    % \end{align*}
+    % Therefore, if $(x_n)$ is a Cauchy sequence, $(x_{1,n})$ and  $(x_{2,n})$ 
+    % are also  Cauchy sequences. Because $\mathcal{H}_1$ and $\mathcal{H}_2$ 
+    % are Hilbert spaces, the two sequences converge and $(x_n)$ converges. 
+    % \textbf{$\mathcal{H}$ is a Hilbert space}.
 
 
-    Let's consider the functions $K_x : t \mapsto K(x,t) = \alpha K_1(x,t) + 
-    \beta K_2(x, t)$ for $x \in \mathcal{X}$
+    % Let's consider the functions $K_x : t \mapsto K(x,t) = \alpha K_1(x,t) + 
+    % \beta K_2(x, t)$ for $x \in \mathcal{X}$
 
-    Let, $f\in \mathcal{H}$, $x\in \mathcal{X}$. $f$ can be written $f = 
-    \sqrt{\alpha}f_1 + \sqrt{\beta}f_2$ with $f_1 \in \mathcal{H}_1$ and
-    $f_2 \in \mathcal{H}_2$. 
-    \begin{align*}
-        f(x) &= \sqrt{\alpha}f_1(x) + \sqrt{\beta}f_2(x)\\
-        &= \sqrt{\alpha}\langle f_1, K_{1,x}\rangle_{\mathcal{H}_1} + 
-        \sqrt{\beta}\langle f_2, K_{2,x}\rangle_{\mathcal{H}_2}\\
-        &=\langle f, K_x \rangle_{\mathcal{H}}
-    \end{align*}
+    % Let, $f\in \mathcal{H}$, $x\in \mathcal{X}$. $f$ can be written $f = 
+    % \sqrt{\alpha}f_1 + \sqrt{\beta}f_2$ with $f_1 \in \mathcal{H}_1$ and
+    % $f_2 \in \mathcal{H}_2$. 
+    % \begin{align*}
+    %     f(x) &= \sqrt{\alpha}f_1(x) + \sqrt{\beta}f_2(x)\\
+    %     &= \sqrt{\alpha}\langle f_1, K_{1,x}\rangle_{\mathcal{H}_1} + 
+    %     \sqrt{\beta}\langle f_2, K_{2,x}\rangle_{\mathcal{H}_2}\\
+    %     &=\langle f, K_x \rangle_{\mathcal{H}}
+    % \end{align*}
     \paragraph{2.2}
 
     \section*{Exercise 3. RKHS}
@@ -146,23 +148,104 @@
     sequence $f_n(x)$ is Cauchy for any $x$ and converges to a real number 
     $f(x)$. 
     And since $f(x) = \lim_\infty f_n(x) = \lim_\infty \int_0^xf'_n(u)\text{d}u
-    =  \int_0^x g(u)\text{d}u$, f is absolutely continuous and $f' = g$ almost
+    =  \int_0^x g(u)\text{d}u$, $f$ is absolutely continuous and $f' = g$ almost
     everywhere. Moreover, $f'\in L^2([0, 1])$ and $f(0) = \lim_\infty f_n(0) 
     = 0$. 
      
     Finally, $\lVert f_n - f \rVert_\mathcal{H} = \lVert f'_n - g 
-    \rVert_{L^2([0,1])} \rightarrow 0$ and $f\in \mathcal{H}$.
-    \textbf{$\mathcal{H}$ is complete, therefore $\mathcal{H}$ is a Hilbert
-    space}.
+    \rVert_{L^2([0,1])} \xrightarrow[n \rightarrow +\infty]{} 0$ and $f\in 
+    \mathcal{H}$. \textbf{$\mathcal{H}$ is complete, therefore $\mathcal{H}$ is 
+    a Hilbert space}.
     \vspace{1cm}
 
     \textbf{Reproducing property: }
 
     We will now show that $\mathcal{H}$ is the RKHS with corresponding kernel 
-    $K: (x, y) \rightarrow \min(x, y)$ on $[0, 1]$.
+    $K: (x, y) \rightarrow \min(x, y)$ on $[0, 1]^2$.
 
     For $x\in [0, 1]$, the function $K_x = \min(x,\cdot)$ is differentiable 
-    except on the singleton ${x}$ which has a null measure, it is absolutely 
+    except on the singleton $\{x\}$ which has a null measure, it is absolutely 
     continuous. Its derivative is square integrable and $\min(x,0) = 0$, 
     \textbf{therefore $K_x$ is in $\mathcal{H}$ for all $x$}.
+
+    For any $x\in [0, 1]$ and $f \in \mathcal{H}$
+    \begin{align*}
+        \langle f, K_x \rangle_\mathcal{H} = \int_0^1 f'(u)K'_x(u)\text{d}u = 
+        \int_0^x f'(u)\text{d}u = f(x)
+    \end{align*}
+    Therefore, \textbf{$K$ is the r.k. of the RKHS $\mathcal{H}$}.
+
+    \paragraph{3.2} The above demonstration also shows that 
+    \textbf{$\mathcal{H}$ is a Hilbert space} by remarking that 
+    \begin{align*}
+        f(1) = \lim_\infty f_n(1) = 1
+    \end{align*} for $(f_n)$ Cauchy sequence of elements of 
+    $\mathcal{H}$.
+    
+    We will now show that the r.k. corresponding to this Hilbert space is $K: 
+    (x, y) \mapsto \min(x,y) - xy$. 
+
+    For $x\in[0, 1]$, the function $K_x$ has a derivative everywhere except on 
+    $\{x\}$ and its derivative is square integrable. Moreover, $K_x(0) = 0$ and 
+    $K_x(1) = 0 $, therefore \textbf{$K_x$ is in $\mathcal{H}$}.
+
+    Let $x\in[0, 1]$ and $f\in \mathcal{H}$
+    \begin{align*}
+        \langle f, K_x \rangle_\mathcal{H} = \int_0^1 f'(u)K'_x(u)\text{d}u = 
+        (1-x)\int_0^x f'(u)\text{d}u - x \int_x^1 f'(u)\text{d}u = f(x)
+    \end{align*}
+
+    Therefore \textbf{$K$ is the r.k. of the RKHS $\mathcal{H}$}.
+
+    \paragraph{3.3} 
+
+    \section*{Exercise 4. Duality}
+    \paragraph{4.a} The problem is a convex problem for which strong duality 
+    holds because it is strictly feasible (e.g the point $f=0$ satisfies the
+    inequality constraint). Therefore, there exist a dual parameter such that
+    the problem is equivalent to 
+    \begin{equation*}
+        \begin{aligned}
+        & \underset{f\in\mathcal{H}_\mathcal{K}}{\text{min}}
+        & & \frac{1}{n}\sum_{i=1}^n \ell_{y_i}(f(x_i)) + \lambda \lVert f
+        \rVert_{\mathcal{H}_\mathcal{K}}\\
+        \end{aligned}
+    \end{equation*}
+
+    According to the representer theorem, the above problem has a solution of
+    the form $\forall x\in \mathcal{X}$
+    \begin{align*}
+        f(x) = \sum_{i=1}^n \alpha_i K(x_i, x)
+    \end{align*}
+    The optimization problem can be re-written as 
+    \begin{equation*}
+        \begin{aligned}
+        & \underset{\alpha\in\mathbb{R}^n}{\text{min}}
+        & & R(K\alpha) + \lambda \alpha^\top K \alpha\\
+        \end{aligned}
+    \end{equation*} 
+    where 
+    \begin{align*}
+        R:& \ \mathbb{R}^n \rightarrow \mathbb{R}\\
+        & ([K\alpha]_1, ..., [K\alpha]_n) \mapsto \frac{1}{n}\sum_{i=1}^n
+        \ell_{y_i}([K\alpha]_i)
+    \end{align*}
+
+    \paragraph{4.b} From the definition
+    \begin{align*}
+        R^*(u) &= \sup_{x \in \mathbb{R}^n}\left( x^\top u - R(x) \right) \\
+        &= \sup_{x \in \mathbb{R}^n} \frac{1}{n}\sum_{i=1}^n (nx_i u_i - 
+        \ell_{y_i}(x_i))\\
+        &= \frac{1}{n}\sum_{i=1}^n \ell^*_{y_i}(nu_i)
+    \end{align*}
+        
+    \paragraph{4.c} The Laplacian of the problem is 
+    \begin{align*}
+        L(u, \alpha, \mu) = R(u) + \lambda \alpha^\top K \alpha + \mu^\top (
+        K\alpha - u)
+    \end{align*}
+    The dual function is given by $g(\mu) = \inf_{u, \alpha} L(u, \alpha, \mu)$
+    \begin{align*}
+        R^*(u) + \inf(\lambda\alpha^\top K \alpha + \mu^\top K\alpha)
+    \end{align*}
 \end{document}
