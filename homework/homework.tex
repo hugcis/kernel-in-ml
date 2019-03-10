@@ -197,8 +197,65 @@
 
     Therefore \textbf{$K$ is the r.k. of the RKHS $\mathcal{H}$}.
 
-    \paragraph{3.3} 
+    \paragraph{3.3} By the theorem on Green kernels, we have that $\mathcal{H}$
+    is a RKHS that admits as r.k. the Green function of the operator $D^*D$, 
+    where $D = \frac{\text{d}}{\text{d}x} + 1$
+    To find the r.k. of $\mathcal{H}$ we need to solve in $K$
+    \begin{align*}
+        f(x) = \langle D^*DK_x, f\rangle_{L^2([0, 1])} = \langle DK_x, 
+        Df\rangle_{L^2([0, 1])} = \langle K_x, f\rangle_{\mathcal{H}}
+    \end{align*}
+    Since $\forall x \in [0, 1]$
+    \begin{align*}
+        \int_0^1 K'_x(u)f'(u) + K_x(u)f(u)\text{d}u& = \left[K'_x(u)f(u)
+        \right]^1_0 - \int_0^1K''_x(u)f(u)\text{d}u + 
+        \int_0^1K_x(u)f(u)\text{d}u\\& = \int_0^1 (K_x(u) - K''_x(u))f(u)
+        \text{d}u
+    \end{align*}
+    We can then write $D^*D = 1 - \frac{\text{d}^2}{\text{d}x^2}$. Let $x
+    \in[0, 1]$, the Green function of the operator $D^*D$ solves the equation 
+    \begin{align*}
+        (D^*D) G(x, t) = G(x, t) - G''(x, t)  = \delta(x-t)
+    \end{align*} therefore, the solutions have the form $t\mapsto 
+    c_1 e^t + c_2 e^{-t}$. On $[0, x)$, the boundary conditions imply $c_1 = 
+    -c_2$ and on $(x, 1]$, $c_1e = -c_2e^{-1}$. We have the following general 
+    form of the Green function
+    \begin{align*}
+        G(x, t) = \begin{cases}
+            A(x)\sinh(t)\\
+            B(x)\sinh(1 - t)
+        \end{cases}
+    \end{align*}
+    The continuity condition at $t=x$ gives $A(x)\sinh(x) = B(x)\sinh(1-x)$ and 
+    the condition on the jump in derivative (obtained by 
+    integrating the differential equation between $x-\epsilon$ and
+     $x+\epsilon$ with $\epsilon \rightarrow 0$) gives $  A(x) \cosh(x) + 
+     \cosh(1-x)B(x) = -1$
 
+    Therefore, the solution is 
+    \begin{align*}
+    K_x(t) &= G(x, t) = \begin{cases}
+        \frac{1}{\sinh(1)}\sinh(1-x)\sinh(t)  & \text{for } 0\leq t < x\\
+        \frac{1}{\sinh(1)}\sinh(x)\sinh(1 - t)& \text{for } x < t\leq 1
+    \end{cases}\\
+    & = \min\left(\frac{1}{\sinh(1)}\sinh(1-x)\sinh(t), 
+    \frac{1}{\sinh(1)}\sinh(x)\sinh(1 - t)\right) 
+    \end{align*}
+    \begin{align*}
+        f(x) &= \langle D^* D G, f \rangle\\
+        & = \langle  D G, Df \rangle  \\
+        &= \int_0^x \frac{\sinh(1-x)}{\sinh 1} 
+        (\sinh(u)f(u) + \cosh(u)f'(u ) )\text{d}u + \\
+        &\quad \int_x^1  \frac{\sinh(x)}{\sinh 1} 
+        (\sinh(1-u)f(u) - \cosh(1- u)f'(u))\text{d}u
+    \end{align*}
+
+    Since all functions $K_x$ are in $\mathcal{H}$, the kernel 
+    \begin{align*}
+        K(x, y) = \min\left(\frac{1}{\sinh(1)}\sinh(1-x)\sinh(y), 
+        \frac{1}{\sinh(1)}\sinh(x)\sinh(1 - y)\right) 
+    \end{align*}
+    is the r.k. of $\mathcal{H}$.
     \section*{Exercise 4. Duality}
     \paragraph{4.a} The problem is a convex problem for which strong duality 
     holds because it is strictly feasible (e.g the point $f=0$ satisfies the
