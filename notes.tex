@@ -8,6 +8,7 @@
 \usepackage[most]{tcolorbox}
 \usepackage{boxedthms}
 \usepackage{hyperref}
+\usepackage{dsfont}
 
 \title{Kernel Methods in Machine Learning - Course Notes}
 \author{Hugo Cisneros}
@@ -446,12 +447,26 @@ In practice:
   \begin{align*}
     \forall (x, y) \in [0, 1]^2, K(x, y) = \min(x, y)
   \end{align*}.
+  \par \hfill \hyperref[prf:green1]{\small Proof}.
 \end{Theorem}
+
+\begin{Definition}{Green functions}{}
+  Consider the differential equation $f = Dg$ ($D$ differential operator).
+
+  Solutions of the form $g(x) = \int_\mathcal{X} k(x,y)f(y) \text{d}y$ for some
+  function $k$ that must satisfy 
+  \begin{align*}
+    \forall x \in \mathcal{X},\quad f(x)= Dg(x) = 
+  \langle Dk_x, f\rangle_{L^2(\mathcal{X})}
+  \end{align*}
+
+  If $k$ exists, it is called the Green function of the operator $D$.
+\end{Definition}
 
 \begin{Theorem}{General Green Kernel}{green_general}
   If $D$ is a differential operator on a class of functions of $\mathcal{H}$
   such that the inner product $\langle f, g \rangle_\mathcal{H} = \langle Df, Dg 
-  \rangle_{L^2(\mathcal{X})}$
+  \rangle_{L^2(\mathcal{X})}$ make $\mathcal{H}$ a Hilbert space
 
   Then $\mathcal{H}$ is a RKHS and admits for r.k. the Green function of the 
   operator $D^*D$
@@ -469,6 +484,219 @@ In practice:
     continuous p.d kernel (w.r.t the Borel topology)
   \end{itemize}
 \end{Definition}
+
+% TODO
+
+\subsubsection{Shift invariant Kernels}
+\begin{Definition}{Fourier-Stieltjes coefficients}{}
+  For a measure $\mu \in M(\mathbb{T})$ the set of the finite complex Borel 
+  measures of the torus $[0, 2\pi]$, the Fourier-Stieltjes coefficients of 
+  $\mu$ is the sequence
+  \begin{align*}
+    \forall n \in \mathbb{Z}, \quad \hat{\mu}(n) = \frac{1}{2\pi}
+    \int_\mathbb{T}e^{-int}\text{d}\mu(t)
+  \end{align*}
+  (It is an extension of Fourier transform for integrable functions to measures)
+\end{Definition}
+
+\begin{Definition}{Shift invariant kernels on $\mathbb{Z}$}
+  A kernel $K: \mathbb{Z}\times \mathbb{Z} \rightarrow\mathbb{R}$ is called 
+  shift invariant (or translation invariant, t.i.) if it only depends on the 
+  difference between its arguments, i.e. 
+  \begin{align*}
+    \forall x, y \in \mathbb{Z}, \quad K(x, y) = a_{x-y}
+  \end{align*}
+  For a sequence $(a_n)_{n\in\mathbb{Z}}$. The sequence is called p.d. if the 
+  corresponding kernel is p.d..
+\end{Definition}
+
+\begin{Theorem}{Herglotz}{herglotz}
+  A sequence $(a_n)_{n\in\mathbb{Z}}$ is p.d. iff it is the Fourier-Stieltjes 
+  transform of a positive measure $\mu \in M(\mathbb{T})$
+\end{Theorem}
+
+Examples:
+\begin{itemize}
+  \item Diagonal kernel: 
+  \begin{align*}
+    \mu = \text{d}t, \quad a_n = \hat{\mu}(n)=  \frac{1}{2\pi}\int_\mathbb{T}
+    e^{-int}\text{d}t = \begin{cases}
+      1 & \text{if } n=0,\\
+      0 & \text{otherwise}
+    \end{cases}
+  \end{align*}
+  The kernel is $K(x, t) = \mathds{1}(x=t)$
+  \item Constant kernel: for $C\geq 0$
+  \begin{align*}
+    \mu = 2\pi C\delta_0, \quad a_n = \hat{\mu}(n)=  C\int_\mathbb{T}e^{-int}
+    \delta_0(t)= C
+  \end{align*}
+  resulting in $K(x, t) = C$
+\end{itemize}
+
+\begin{Definition}{Fourier transform on $\mathbb{R}^d$}{}
+  For any $f\in L^1(\mathbb{R}^d)$ the Fourier transform of $f$ is 
+  \begin{align*}
+    \forall \omega \in \mathbb{R}^d, \quad \hat{f}(\omega) = 
+    \int_{\mathbb{R}^d} e^{-i x^\top \omega} f(x)\text{d}x
+  \end{align*}
+\end{Definition}
+
+\begin{Definition}{Fourier-Stieltjes transform}{}
+  For any $\mu \in M(\mathbb{R}^d)$, the Fourier-Stieltjes transform of $\mu$ 
+  is the function:
+
+  \begin{align*}
+    \forall \omega \in \mathbb{R}^d, \quad\hat{\mu}(\omega) =
+    \int_{\mathbb{R}^d}e^{-i x^\top \omega}\text{d}\mu(x)
+  \end{align*}
+\end{Definition}
+
+
+\begin{Definition}{Shift invariant kernels on $\mathbb{R}^d$}{}
+  A kernel $K: \mathbb{R}^d\times \mathbb{R}^d \rightarrow\mathbb{R}$ is called 
+  shift invariant (or translation invariant, t.i.) if it only depends on the 
+  difference between its arguments, i.e. 
+  \begin{align*}
+    \forall x, y \in \mathbb{R}^d, \quad K(x, y) = \varphi(x-y)
+  \end{align*}
+  for some function $\varphi : \mathbb{R}^d\rightarrow \mathbb{R}$. Such a 
+  function $\varphi$ is called positive definite if the corresponding kernel 
+  $K$ is p.d.
+\end{Definition}
+
+\begin{Theorem}{Bochner}{bochner}
+  A continuous function $\varphi : \mathbb{R}^d\rightarrow \mathbb{R}$ is p.d. 
+  iff it is the Fourier-Stieltjes transform of a symmetric and positive finite
+  Borel measure $\mu \in M(\mathbb{T})$
+\end{Theorem}
+
+\begin{Theorem}{RKHS of translation invariant kernels}{rkhs_ti}
+  Let $K(x,t) = \varphi(x-t)$ be a translation invariant p.d. kernel  such that
+  $\varphi$ is integrable on $\mathbb{R}^d$ as well as its Fourier transform 
+  $\hat{\varphi}$. The subset $\mathcal{H}$ of $L^2(\mathbb{R})$ that consists
+  of integrable and continuous functions $f$ such that 
+  \begin{align*}
+    \lVert f \rVert^2_K \triangleq \frac{1}{(2\pi)^d}\int_{\mathbb{R}^d}
+    \frac{\left|\hat{f}(\omega)\right|^2}{\hat{\varphi}(\omega)}\text{d}\omega
+    < +\infty
+  \end{align*}
+  endowed with the inner product
+  \begin{align*}
+    \langle f, g \rangle \triangleq \frac{1}{(2\pi)^d}\int_{\mathbb{R}^d}
+    \frac{\hat{f}(\omega)\overline{\hat{g}(\omega)}}{\hat{\varphi}(\omega)}
+    \text{d}\omega
+  \end{align*}
+  is a RKHS with $K$ as r.k.
+\end{Theorem}
+
+Examples:
+\begin{itemize}
+  \item Gaussian kernel:
+  \begin{align*}
+    K(x, y) = e^{-\frac{(x-y)^2}{2\sigma^2}}
+  \end{align*}
+  corresponds to $\hat{\varphi}(\omega) = e^{-\frac{\sigma^2\omega^2}{2}}$ and 
+  \begin{align*}
+    \mathcal{H}  = \left\{f: \int\left|\hat{f}(\omega)\right|^2 
+    e^{\frac{\sigma^2\omega^2}{2}} \text{d}\omega < \infty \right\}
+  \end{align*}
+  In particular, all functions in $\mathcal{H}$ are infinitely differentiable 
+  with all derivatives in $L^2$.
+
+  \item Laplace kernel:
+  \begin{align*}
+    K(x, y) = \frac{1}{2}e^{-\gamma|x-y|}
+  \end{align*}
+  corresponds to $\hat{\varphi}(\omega) = \frac{\gamma}{\gamma^2 + \omega^2}$ 
+  and 
+  \begin{align*}
+    \mathcal{H}  = \left\{f: \int\left|\hat{f}(\omega)\right|^2 
+    \frac{\gamma}{\gamma^2 + \omega^2} \text{d}\omega < \infty \right\}
+  \end{align*}
+  the set of functions $L^2$ differentiable with derivatives in $L^2$ (Sobolev
+  norm).
+
+  \item Low frequency filter:
+  \begin{align*}
+    K(x, y) = \frac{\sin(\Omega(x-y))}{\pi(x-y)}
+  \end{align*}
+  corresponds to $\hat{\varphi}(\omega) = U(\omega + \Omega) - U(\omega - 
+  \Omega)$ 
+  and 
+  \begin{align*}
+    \mathcal{H}  = \left\{f: \int_{|\omega| > \Omega} \left|\hat{f}(\omega)
+    \right|^2 \text{d}\omega = 0 \right\}
+  \end{align*}
+  the set of functions whose spectrum is in $[-\Omega, \Omega]$.
+\end{itemize}
+
+\subsubsection{Generalization to semigroups}
+\begin{Definition}{}{}
+  \begin{itemize}
+    \item A semigroup $(S,\circ)$ is a nonempty set $S$ equipped with an 
+    associative composition $\circ$ and a neutral element $e$.
+    \item A semigroup with involution $(S,\circ, *)$ is a semigroup $(S,\circ)$
+    together with a mapping $*:S\rightarrow S$ called involution satisfying:
+    \begin{enumerate}
+      \item $(s\circ t )^* = t^* \circ s^*$ for $s,t\in S$.
+      \item $(s^*)^* = s$ for $s\in S$.
+    \end{enumerate}
+  \end{itemize}
+  
+  Exemples:
+  \begin{itemize}
+    \item A group $(G, \circ)$ is a semigroup with involution with $s^* = 
+    s^{-1}$.
+    \item Any abelian semigroup $(S, +)$ is a semigroup with involution with 
+    identity as involution.
+  \end{itemize}
+\end{Definition}
+
+\subsection{Kernels for probabilistic models}
+\subsubsection{Fisher kernel}
+
+\begin{Definition}{Fisher kernel}{}
+  Fix a parameter $\theta_0 \in \Theta$ (obtained for instance by maximum 
+  likelihood over a training set).
+
+  For each sequence $x$, compute the Fisher score vector
+  \begin{align*}
+    \Phi_{\theta_0}(x) = \nabla_\theta \log P_\theta(x)|_{\theta=\theta_0}
+  \end{align*}
+  which can be interpreted as the local contribution of each parameter.
+
+  Form the kernel
+  \begin{align*}
+    K(x, x') = \Phi_{\theta_0}(x)^\top I(\theta_0)^{-1}\Phi_{\theta_0}(x')
+  \end{align*}
+  where $I(\theta_0) = \mathbb{E}[\Phi_{\theta_0}(x)\Phi_{\theta_0}(x)^\top]$ is 
+  the Fisher information matrix.
+\end{Definition}
+\begin{itemize}
+  \item Describes how each parameter contributes to generating an example
+  \item Invariant under change of parametrization 
+\end{itemize}
+In practice,
+\begin{itemize}
+  \item $\Phi_{\theta_0}(x)$ can be computed explicitly for many models (HMMs)
+  estimated from data.
+  \item $I(\theta_0)$ is often replaced by the identity matrix. 
+  \item Several different models (i.e., different $\theta_0$) can be trained and
+  combined.
+  \item Fisher vectors $\varphi_{\theta_0}(x) = 
+  I(\theta_0)^{-1/2}\Phi_{\theta_0}(x)$ and correspond to the explicit 
+  embedding 
+  \begin{align}
+    K(x, x') = \varphi_{\theta_0}(x)^\top \varphi_{\theta_0}(x')
+  \end{align}
+\end{itemize}
+
+Example: Gaussian model 
+
+\subsection{Kernels for biological sequences}
+\subsection{Kernels for graphs}
+\subsection{Kernels on graphs}
 
 %%---------------------------------
 \section{Open Problems and Research Topics}
@@ -614,7 +842,7 @@ In practice:
 
 \subsection{The Kernel Jungle}
 
-\begin{Proof}{}{}
+\begin{Proof}{of Theorem \ref{thm:green1}}{green1}
   
 \end{Proof}
 
