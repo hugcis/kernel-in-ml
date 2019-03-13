@@ -17,7 +17,7 @@
 
     \paragraph{1.1} $K$ is symmetric since 
     \begin{align*}
-        \forall x,y \in \mathbb{R}^2 K(y, x) = \cos(-(x-y)) = \cos(x - y) = 
+        \forall x,y \in \mathbb{R}^2 \quad K(y, x) = \cos(-(x-y)) = \cos(x - y) = 
         K(x, y)
     \end{align*}
     and because for all sequences of $(x_i)$ and $(a_i)$ of $\mathbb{R}$
@@ -92,58 +92,27 @@
     kernels and because $\alpha$ and $\beta$ are positive scalars. Let 
     $\mathcal{H}_1$ and $\mathcal{H}_2$ be their respective RKHS.
 
-    
-    % Since, $K_1$ and $K_2$ are p.d., by Aronszajn's theorem there exist 
-    % $\Phi_1, \Phi_2$ mappings from $\mathcal{X}$ to $\mathcal{H}_1$ and 
-    % $\mathcal{H}_2$ such that $\forall x,y \in \mathbb{R}^2$
-    % \begin{align*}
-    %     K(x,y) &\triangleq \alpha K_1(x,y) + \beta K_2(x, y)\\
-    %     &= \langle \sqrt{\alpha}\Phi_1(x),\sqrt{\alpha}\Phi_1(y) 
-    %     \rangle_{\mathcal{H}_1} + \langle\sqrt{\beta} \Phi_2(x),
-    %     \sqrt{\beta}\Phi_2(y) \rangle_{\mathcal{H}_2}\\
-    %     & = \langle \Phi(x), \Phi(y) \rangle_{\mathcal{H}}
-    % \end{align*}
-    % Where $\langle.,.\rangle_{\mathcal{H}}$ is defined above and
-    % \begin{align*}
-    %     \Phi & :\mathcal{X} \rightarrow \mathcal{H} \triangleq \sqrt{\alpha}
-    %     \mathcal{H}_1 + \sqrt{\beta} \mathcal{H}_2\\
-    %     &\quad x\mapsto \sqrt{\alpha} \Phi_1(x) + \sqrt{\beta} \Phi_2(x)
-    % \end{align*}
-    % $\langle.,.\rangle_{\mathcal{H}}$ is clearly an inner product. And for any
-    % $(x_n)_{n\in\mathbb{N}}$ sequence of $\mathcal{H}$, we have that 
-    % $\forall n \in \mathbb{N},x_n = \sqrt{\alpha} x_{1,n} + \sqrt{\beta} 
-    % x_{2,n}$ and $\forall n,m \in \mathbb{N}$
-    % \begin{align*}
-    %     \lVert x_n - x_m \rVert^2_\mathcal{H} &= \lVert \sqrt{\alpha} (x_{1,n} - 
-    %     x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m})\rVert^2_\mathcal{H}\\
-    %     &= \langle \sqrt{\alpha} (x_{1,n} - 
-    %     x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m}), \sqrt{\alpha} (x_{1,n} - 
-    %     x_{1,m}) + \sqrt{\beta} (x_{2,n} -  x_{2,m}) \rangle_{\mathcal{H}}\\
-    %     &= \alpha \langle x_{1,n} - x_{1,m}, x_{1,n} - x_{1,m} 
-    %     \rangle_{\mathcal{H}_1} + \beta \langle x_{2,n} - x_{2,m}, x_{2,n} - 
-    %     x_{2,m}  \rangle_{\mathcal{H}_2} \tag{by definition of 
-    %     $\langle.,.\rangle_{\mathcal{H}}$}\\
-    %     &= \alpha \lVert x_{1,n} - x_{1,m} \rVert^2_{\mathcal{H}_1} +
-    %     \beta \lVert x_{2,n} - x_{2,m} \rVert^2_{\mathcal{H}_2}
-    % \end{align*}
-    % Therefore, if $(x_n)$ is a Cauchy sequence, $(x_{1,n})$ and  $(x_{2,n})$ 
-    % are also  Cauchy sequences. Because $\mathcal{H}_1$ and $\mathcal{H}_2$ 
-    % are Hilbert spaces, the two sequences converge and $(x_n)$ converges. 
-    % \textbf{$\mathcal{H}$ is a Hilbert space}.
+    The RKHS of $\alpha K_1$ is $\tilde{\mathcal{H}}_1 = \sqrt{\alpha}
+    \mathcal{H}_1$ endowed with the inner product $\langle.,.
+    \rangle_{\tilde{\mathcal{H}}_1} = \frac{1}{\alpha}\langle.,.
+    \rangle_{\mathcal{H}_1}$. 
+    Because for $f = \sqrt{\alpha}f_1 \in\tilde{\mathcal{H}}_1$ and $x\in 
+    \mathcal{X}$,  we have
+    $\langle \alpha K_{1,x} , \sqrt{\alpha} f_1 
+    \rangle_{\tilde{\mathcal{H}}_1} =  \sqrt{\alpha} \langle K_{1,x} , 
+    f_1 \rangle_{\mathcal{H}_1} = \sqrt{\alpha} f_1(x) = f(x)$ and all $\alpha 
+    K_{1,x}$ are in $\tilde{\mathcal{H}}_1$.
 
+    From N. Aronszajn's ``Theory of reproducing kernels'', the RKHS of the sum 
+    of two kernels $\tilde{K}_1 = \alpha K_1$ and $\tilde{K}_2 = \beta K_2$ is 
+    the class $\mathcal{H}$ of all functions $f = f_1 + f_2$ with $f_1 \in 
+    \tilde{\mathcal{H}}_1$ the RKHS of $\tilde{K}_1$ and $f_2 \in 
+    \tilde{\mathcal{H}}_2$ the RKHS of $\tilde{K}_2$, endowed with the norm 
+    $\lVert f \rVert^2_{\mathcal{H}} = \min_{f_1 + f_2 = f} \left(\lVert f 
+    \rVert^2_{\tilde{\mathcal{H}}_1} + \lVert f 
+    \rVert^2_{\tilde{\mathcal{H}}_2}\right)$ a minimum over all decompositions 
+    of $f$ on $\tilde{\mathcal{H}}_1 + \tilde{\mathcal{H}}_2$.
 
-    % Let's consider the functions $K_x : t \mapsto K(x,t) = \alpha K_1(x,t) + 
-    % \beta K_2(x, t)$ for $x \in \mathcal{X}$
-
-    % Let, $f\in \mathcal{H}$, $x\in \mathcal{X}$. $f$ can be written $f = 
-    % \sqrt{\alpha}f_1 + \sqrt{\beta}f_2$ with $f_1 \in \mathcal{H}_1$ and
-    % $f_2 \in \mathcal{H}_2$. 
-    % \begin{align*}
-    %     f(x) &= \sqrt{\alpha}f_1(x) + \sqrt{\beta}f_2(x)\\
-    %     &= \sqrt{\alpha}\langle f_1, K_{1,x}\rangle_{\mathcal{H}_1} + 
-    %     \sqrt{\beta}\langle f_2, K_{2,x}\rangle_{\mathcal{H}_2}\\
-    %     &=\langle f, K_x \rangle_{\mathcal{H}}
-    % \end{align*}
     \paragraph{2.2} $K$ is symmetric because $\langle., .
     \rangle_\mathcal{F}$ is an inner product is symmetric 
     and similarly, $K$ is positive definite because $\langle., .
@@ -164,7 +133,7 @@
     $\mathcal{H}$ by extending $\mathcal{H}_0$ with the limits of Cauchy 
     sequences.
 
-    \section*{Exercise 3. RKHS}
+    \section*{Exercise 3. Sobolev spaces}
     \paragraph{3.1} \textbf{ $\mathcal{H}$ is Hilbert: }
     
     $\mathcal{H}$ is a vector space of functions. $\langle ., .
@@ -242,9 +211,12 @@
 
     Therefore \textbf{$K$ is the r.k. of the RKHS $\mathcal{H}$}.
 
-    \paragraph{3.3} $\mathcal{H}$ is a pre-Hilbert space, and its completeness
+    \paragraph{3.3} (Note: we use the base Hilbert space $\mathcal{H}$ from 
+    question 3.2)
+    
+    $\mathcal{H}$ is a pre-Hilbert space, and its completeness
     results from the fact that a Cauchy sequence of $\mathcal{H}$ is also a 
-    Cauchy sequence in $L^2$
+    Cauchy sequence in $L^2$, it converges 
     
     By the theorem on Green kernels, we have that $\mathcal{H}$
     is a RKHS that admits as r.k. the Green function of the operator $D^*D$, 
