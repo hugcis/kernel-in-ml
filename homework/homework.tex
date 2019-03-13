@@ -57,7 +57,34 @@
     By Jensen's inequality, the above quantity is positive because the function
     $\phi: (X_1, ..., X_n) \mapsto (\sum_{i=1}^n a_i X_i)^2$ is convex. 
     Therefore, \textbf{$K$ is p.d.}.
-    \paragraph{1.4} Let $x, y \in \mathcal{X}$
+
+    \paragraph{1.4} $K$ is symmetric.
+    
+    Let $x, y \in \mathcal{X}$ such that $0 < f(x)g(y) \leq 
+    f(y)g(x)$. The inequality implies $g(x) \neq 0$ and $g(y) \neq 0$.
+    By dividing the inequality above and repeating the process for the opposite 
+    inequality, we obtain the following equality
+    \begin{align*}
+        \min(f(x)g(y), f(y)g(x)) = g(x)g(y)\min\left(\frac{f(x)}{g(x)}, 
+        \frac{f(y)}{g(y)}\right)
+    \end{align*}
+    which holds for $g(x) \neq 0$ and $g(y) \neq 0$.
+    Let $(x_i)_{i\in \mathbb{N}}$ a finite sequence of elements of $\mathcal{X}$ 
+    and $(a_i)$ a other sequence of scalars. We can ignore the terms for which 
+    $K(x_i, x_i) = 0$ in the sum since they do not account for the total and 
+    therefore assume $\forall x_i g(x_i) \neq 0$  
+    \begin{align*}
+        \sum_{i,j} a_i a_j K(x_i, x_j) &= \sum_{i,j} a_i a_j \min(f(x_i)g(x_j), 
+        f(x_j)g(x_i))\\
+        &= \sum_{i,j} a_i a_j g(x_i)g(x_j)\min\left(\frac{f(x_i)}{g(x_i)}, 
+        \frac{f(x_j)}{g(x_j)}\right)\\
+        &= \sum_{i,j} a_i a_j g(x_i)g(x_j)\int_0^{+\infty} \mathds{1}_{t 
+        \leq \frac{f(x_i)}{g(x_i)}}(t) \mathds{1}_{t 
+        \leq \frac{f(x_j)}{g(x_j)}}(t) \text{d}t \\
+        &= \int_0^{+\infty} \left(\sum_i a_i g(x_i)\mathds{1}_{t 
+        \leq \frac{f(x_i)}{g(x_i)}}(t)\right)^2\text{d}t \geq 0
+    \end{align*}
+    \textbf{$K$ is p.d.}.
     \paragraph{1.5}
 
     \section*{Exercise 2. RKHS}
@@ -117,7 +144,25 @@
     %     \sqrt{\beta}\langle f_2, K_{2,x}\rangle_{\mathcal{H}_2}\\
     %     &=\langle f, K_x \rangle_{\mathcal{H}}
     % \end{align*}
-    \paragraph{2.2}
+    \paragraph{2.2} $K$ is symmetric because $\langle., .
+    \rangle_\mathcal{F}$ is an inner product is symmetric 
+    and similarly, $K$ is positive definite because $\langle., .
+    \rangle_\mathcal{F}$ is an inner product.
+
+    A candidate RKHS for $K$ is $\mathcal{H}_0 = \text{span}\left\{ K_x, x\in 
+    \mathcal{X}\right\}$, endowed with the inner product 
+    \begin{align*}
+        \langle f, g \rangle_{\mathcal{H}_0} = \sum_{i,j} \alpha_i \beta_j 
+        \langle \Psi(x_i), \Psi(x_j) \rangle_\mathcal{F}
+    \end{align*}
+    where $f$ and $g$ were decomposed as $f = \sum_i \alpha_i K_{x_i}$ and $g = 
+    \sum_j \beta_j K_{x_j}$. The expression above does not depend on the 
+    decomposition of $f$ and $g$.
+
+    This defines an inner product on $\mathcal{H}_0$. With the same 
+    construction as in the proof of Aronszajn's theorem, we get a Hilbert space
+    $\mathcal{H}$ by extending $\mathcal{H}_0$ with the limits of Cauchy 
+    sequences.
 
     \section*{Exercise 3. RKHS}
     \paragraph{3.1} \textbf{ $\mathcal{H}$ is Hilbert: }
@@ -129,9 +174,9 @@
     Since $f$ is absolutely continuous, it has a derivative almost everywhere 
     and the following equality holds $\forall x \in [0, 1]$
     \begin{align*}
-        |f(x)|^2 &= \left| f(0) + \int_0^x f'(x)\text{d}x \right|^2\\
-        &= \left| \int_0^x f'(x)\text{d}x \right|^2 \tag{$f(0) = 0$}\\ 
-        &\leq x\cdot\int_0^x f'(u)^2\text{d}u = x \cdot
+        |f(x)|^2 &= \left| f(0) + \int_0^x f'(u)\text{d}u \right|^2\\
+        &= \left| \int_0^x f'(u)\text{d}u \right|^2 \tag{$f(0) = 0$}\\ 
+        &\leq x\cdot\int_0^1 f'(u)^2\text{d}u = x \cdot
         \langle f, f \rangle_\mathcal{H}
     \end{align*}
     $\langle f, f \rangle_\mathcal{H} \implies f = 0$ and $\langle ., .
@@ -197,7 +242,11 @@
 
     Therefore \textbf{$K$ is the r.k. of the RKHS $\mathcal{H}$}.
 
-    \paragraph{3.3} By the theorem on Green kernels, we have that $\mathcal{H}$
+    \paragraph{3.3} $\mathcal{H}$ is a pre-Hilbert space, and its completeness
+    results from the fact that a Cauchy sequence of $\mathcal{H}$ is also a 
+    Cauchy sequence in $L^2$
+    
+    By the theorem on Green kernels, we have that $\mathcal{H}$
     is a RKHS that admits as r.k. the Green function of the operator $D^*D$, 
     where $D = \frac{\text{d}}{\text{d}x} + 1$
     To find the r.k. of $\mathcal{H}$ we need to solve in $K$
@@ -218,7 +267,7 @@
         (D^*D) G(x, t) = G(x, t) - G''(x, t)  = \delta(x-t)
     \end{align*} therefore, the solutions have the form $t\mapsto 
     c_1 e^t + c_2 e^{-t}$. On $[0, x)$, the boundary conditions imply $c_1 = 
-    -c_2$ and on $(x, 1]$, $c_1e = -c_2e^{-1}$. We have the following general 
+    -c_2$ and on $(x, 1]$, $c'_1e = -c'_2e^{-1}$. We have the following general 
     form of the Green function
     \begin{align*}
         G(x, t) = \begin{cases}
@@ -259,8 +308,9 @@
     \section*{Exercise 4. Duality}
     \paragraph{4.a} The problem is a convex problem for which strong duality 
     holds because it is strictly feasible (e.g the point $f=0$ satisfies the
-    inequality constraint). Therefore, there exist a dual parameter such that
-    the problem is equivalent to 
+    inequality constraint) and thus verifies Slater’s constraint qualification. 
+    Therefore, there exist a dual parameter such that the problem is equivalent 
+    to 
     \begin{equation*}
         \begin{aligned}
         & \underset{f\in\mathcal{H}_\mathcal{K}}{\text{min}}
@@ -303,6 +353,78 @@
     \end{align*}
     The dual function is given by $g(\mu) = \inf_{u, \alpha} L(u, \alpha, \mu)$
     \begin{align*}
-        R^*(u) + \inf(\lambda\alpha^\top K \alpha + \mu^\top K\alpha)
+        g(\mu) = R^*(\mu) + \inf_{\alpha}(\lambda\alpha^\top K \alpha + 
+        \mu^\top K\alpha)
     \end{align*}
+    Since the gradient w.r.t $\alpha$ of $\lambda\alpha^\top K \alpha + 
+    \mu^\top K\alpha$ is the expression $2\lambda K \alpha  + K\mu$, an $\alpha$
+    minimizing this quantity is 
+    \begin{align*}
+        \alpha^* = -\frac{\mu}{2\lambda}
+    \end{align*} 
+    And 
+    \begin{align*}
+        g(\mu) = R^*(\mu) - \frac{1}{4\lambda}\mu^\top K \mu
+    \end{align*}
+    The dual problem is then
+    \begin{equation*}
+        \begin{aligned}
+        & \underset{\mu\in\mathbb{R}^n}{\text{max}}
+        & & g(\mu) = R^*(\mu) - \frac{1}{4\lambda}\mu^\top K \mu\\
+        \end{aligned}
+    \end{equation*} 
+    The problem being strongly convex, for a $\mu^*$ maximizing $g$, a solution 
+    to the original problem 
+    $\underset{\alpha\in\mathbb{R}^n}{\text{min}} (R(K\alpha) + 
+    \lambda \alpha^\top K \alpha)$
+    can be deduced with $\alpha^* = -\frac{\mu^*}{2\lambda}$
+
+    \paragraph{4.d}
+    \begin{itemize}
+        \item For $\ell_y(u) = \log(1 + e^{- yu})$, the function $\ell_y^*$ is 
+        written 
+        \begin{align*}
+            \ell_y^*(u) = \sup_{x\in\mathbb{R}} \left(xu - \log(1 + e^{- yx})
+            \right)
+        \end{align*}
+        By setting the derivative of the term in the $\sup$ to 0, we get
+        $e^{-yx} = \frac{-u}{u+y}$ and 
+        \begin{align*}
+            \ell_y^*(u) = \frac{u}{y}\log\left(\frac{u + y}{-u}\right) - 
+            \log\left(\frac{y}{u + y}\right) + 
+            \begin{cases}
+              \chi_{[-1, 0]}(u)  & 
+              \text{if } y = 1\\
+              \chi_{[0, 1]}(u) & \text{if } y = -1
+            \end{cases}
+        \end{align*} 
+        The dual problem is therefore written
+        \begin{equation*}
+            \begin{aligned}
+            & \underset{\mu\in\mathbb{R}^n}{\text{max}}
+            & & g(\mu) = \frac{1}{n}\sum_{i=1}^n \ell^*_{y_i}(n\mu_i) - 
+            \frac{1}{4\lambda}\mu^\top K \mu\\
+            & \text{s.t} & & -1 \leq y_i\mu_i \leq 0 \quad \forall i
+            \end{aligned}
+        \end{equation*} 
+        \item For $\ell_y(u) = \max(0, 1-yu)^2$, the function $\ell_y^*$ is 
+        written 
+        \begin{align*}
+            \ell_y^*(u) &= \sup_{x\in\mathbb{R}} \left(xu - \max(0, 1-yx)^2
+            \right)\\
+            &= \frac{u}{y}\left(1 + \frac{u}{2y}\right) - \max\left(0 , 
+            \frac{u}{2y}\right)^2
+        \end{align*}
+
+        The resulting dual problem is 
+        \begin{equation*}
+            \begin{aligned}
+            & \underset{\mu\in\mathbb{R}^n}{\text{max}}
+            & & g(\mu) = \sum_{i=1}^n\left[ \frac{\mu_i}{y_i}\left(1 + 
+            \frac{n\mu_i}{2y_i}\right) - \max\left(0 , \frac{\mu_i}{2y_i}
+            \right)^2\right] - \frac{1}{4\lambda}\mu^\top K \mu
+            \end{aligned}
+        \end{equation*} 
+    \end{itemize}
 \end{document}
+
